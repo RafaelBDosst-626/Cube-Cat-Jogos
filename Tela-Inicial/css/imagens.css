@@ -1,0 +1,19 @@
+.sobre-projeto { width: min(1080px, 100%); margin: 0 auto; padding: 0 24px 40px; }
+.identidade-projeto { display: grid; grid-template-columns: minmax(180px, .7fr) minmax(0, 1.8fr); gap: 18px; }
+.identidade-card, .documentacao { padding: 22px; border: 1px solid var(--bg-panel-light); border-radius: 12px; background: var(--bg-panel); }
+.identidade-card h2, .documentacao h2 { margin-bottom: 14px; color: var(--text-light); font-size: 1.1rem; }
+.logo-documentacao { display: block; width: min(180px, 100%); height: 190px; margin: 0 auto; object-fit: contain; }
+.animacao-card figcaption p, .documentacao > p, .documentacao li { color: var(--text-muted); font-size: .95rem; line-height: 1.65; }
+.animacao-card video { display: block; width: 100%; height: auto; aspect-ratio: 762 / 656; margin-top: 12px; border: 0; border-radius: 8px; background: #000; object-fit: contain; }
+.mp4-download { display: inline-block; margin-top: 12px; color: var(--neon-cyan); font-size: .9rem; text-decoration: underline; text-underline-offset: 3px; }
+.mp4-download:hover { color: var(--neon-yellow); }
+.documentacao { margin-top: 18px; }
+.documentacao ul { display: grid; gap: 7px; margin: 12px 0 18px; padding-left: 22px; }
+.documentacao li strong, .documentacao > p strong { color: var(--text-light); }
+.direitos-projeto { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--bg-panel-light); }
+@media (max-width: 600px) {
+  .sobre-projeto { padding-inline: 16px; }
+  .identidade-projeto { grid-template-columns: 1fr; }
+  .logo-documentacao { height: 150px; }
+  .identidade-card, .documentacao { padding: 18px; }
+}

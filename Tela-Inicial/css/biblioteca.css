@@ -1,0 +1,25 @@
+/* ============================================
+   Estilo específico da biblioteca (biblioteca.html)
+   ============================================ */
+
+.lista-jogos {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lista-jogos .btn-jogo {
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 14px;
+  min-height: auto;
+  padding: 16px 20px;
+  font-size: 1rem;
+}
+
+.lista-jogos .btn-jogo .icone {
+  font-size: 1.4rem;
+}

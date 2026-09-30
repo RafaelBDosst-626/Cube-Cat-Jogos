@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz | Cube Cat Jogos</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="Jogo1.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <a href="../index.html" class="btn-voltar">&larr; Voltar</a>
+      <a href="../index.html" class="topbar-logo" aria-label="Voltar para a página inicial"><img src="../logo.svg" alt=""></a>
+    </div>
+    <div class="app">
+      <h1>Quiz</h1>
+      <div class="quiz">
+        <div class="quiz-progress__header">
+          <span id="question-counter">Pergunta 1 de 10</span>
+        </div>
+        <div id="question-progress" class="quiz-progress" role="progressbar" aria-label="Progresso das perguntas" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0">
+        </div>
+        <h2 id="question">Question goes here</h2>
+        <div id="answer-buttons">
+          <button class="btn">Answer 1</button>
+          <button class="btn">Answer 2</button>
+          <button class="btn">Answer 3</button>
+          <button class="btn">Answer 4</button>
+        </div>
+        <button id="next-btn">Next</button>
+      </div>
+    </div>
+    <script src="Jogo1.js"></script>
+    <script src="../js/main.js"></script>
+  </body>
+</html>

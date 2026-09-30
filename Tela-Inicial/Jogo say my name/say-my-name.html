@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Say my name! — Cube Cat Jogos</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="say-my-name.css">
+</head>
+<body>
+  <div class="topbar">
+    <a href="../index.html" class="btn-voltar">&larr; Voltar</a>
+    <a href="../index.html" class="topbar-logo" aria-label="Voltar para a página inicial"><img src="../logo.svg" alt=""></a>
+  </div>
+
+  <header class="say-header">
+    <span class="say-icon" aria-hidden="true">🎭</span>
+    <h1 class="titulo">Say my <span class="destaque">name!</span></h1>
+    <p class="subtitulo">Escolha como você quer jogar</p>
+  </header>
+
+  <main class="say-menu">
+    <section class="modes" aria-label="Modos de jogo">
+      <button class="mode-card" type="button" id="classic-mode">
+        <span class="mode-number">01</span>
+        <span class="mode-name">Clássico</span>
+      </button>
+      <button class="mode-card" type="button" id="fast-mode">
+        <span class="mode-number">02</span>
+        <span class="mode-name">Jogo rápido</span>
+      </button>
+      <button class="mode-card" type="button" id="inverse-mode">
+        <span class="mode-number">03</span>
+        <span class="mode-name">Inverso</span>
+      </button>
+    </section>
+
+    <details class="multiplayer-faq" id="multiplayer-faq">
+      <summary class="multiplayer-card">
+        <span class="multiplayer-icon" aria-hidden="true">♟</span>
+        <span>Multiplayer</span>
+        <span class="multiplayer-arrow" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="multiplayer-setup">
+        <p>Monte uma partida de Say my name com 2 a 4 pessoas. Escolha quem respondeu primeiro, revele as respostas e marque o resultado.</p>
+        <label for="mp-player-count">Quantidade de jogadores</label>
+        <select id="mp-player-count"><option value="2">2 jogadores</option><option value="3">3 jogadores</option><option value="4">4 jogadores</option></select>
+        <div id="mp-player-name-fields" class="mp-player-name-fields"></div>
+        <p id="mp-setup-feedback" class="mp-setup-feedback" role="status" aria-live="polite"></p>
+        <button class="mp-start-button" id="start-multiplayer" type="button">Começar partida</button>
+      </div>
+    </details>
+  </main>
+
+  <footer>Cube Cat Software</footer>
+  <script src="say-my-name.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Say my name — Multiplayer</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="classico.css">
+  <link rel="stylesheet" href="multiplayer.css">
+</head>
+<body>
+  <main class="mp-shell">
+    <section class="mp-game" id="game-panel" aria-hidden="true" inert>
+      <header class="mp-header">
+        <div><p class="eyebrow">SAY MY NAME!</p><h1>Multiplayer</h1></div>
+        <div class="mp-round-stat"><span>Imagem</span><strong id="round-number">1 / 30</strong></div>
+        <div class="mp-round-stat"><span>Resolvidas</span><strong id="solved-count">0 / 30</strong></div>
+      </header>
+
+      <section class="image-pair mp-images" aria-label="Produto e marca">
+        <div class="image-card"><h2>Produto</h2><div class="image-window" role="img" aria-label="Imagem do produto"><img id="product-photo" alt=""><span id="product-visual" aria-hidden="true">📦</span><span class="mp-image-cover" aria-hidden="true"></span></div></div>
+        <div class="image-card"><h2>Marca</h2><div class="image-window" role="img" aria-label="Logo da marca"><img id="brand-photo" alt=""><span id="brand-visual" aria-hidden="true">🏷️</span><span class="mp-image-cover" aria-hidden="true"></span></div></div>
+      </section>
+
+      <section class="mp-answer-pair" aria-label="Respostas">
+        <div class="mp-answer-tile is-covered" id="product-tile"><span>Produto</span><strong id="product-answer" aria-hidden="true"></strong></div>
+        <div class="mp-answer-tile is-covered" id="brand-tile"><span>Marca</span><strong id="brand-answer" aria-hidden="true"></strong></div>
+      </section>
+
+      <p class="mp-turn-prompt" id="turn-prompt">Selecione o card de quem respondeu primeiro.</p>
+      <section class="player-cards" id="player-cards" aria-label="Selecione quem respondeu primeiro"></section>
+
+      <div class="mp-controls">
+        <button class="submit-answer" id="reveal-answer" type="button" disabled>Revelar resposta</button>
+        <div class="mp-judgement" id="judgement-controls" hidden>
+          <p id="judge-prompt"></p>
+          <button class="mp-correct" id="mark-correct" type="button">Acertou · +1 ponto</button>
+          <button class="mp-wrong" id="mark-wrong" type="button">Errou · perde uma vida</button>
+        </div>
+        <button class="submit-answer" id="next-round" type="button" hidden>Próxima rodada</button>
+      </div>
+    </section>
+
+    <section class="mp-over" id="game-over" hidden aria-live="polite">
+      <p class="eyebrow">SAY MY NAME!</p><h1 id="end-title">Fim da partida</h1><p id="end-message"></p>
+      <h2>Placar final</h2><ol id="final-scoreboard"></ol>
+      <a class="submit-answer" href="say-my-name.html">Nova partida</a>
+      <a class="back-link" href="say-my-name.html">Voltar aos modos</a>
+    </section>
+
+    <section class="mp-intro-backdrop" id="match-intro" role="dialog" aria-modal="true" aria-labelledby="match-intro-title">
+      <div class="mp-intro-card">
+        <p class="eyebrow">SAY MY NAME!</p><h2 id="match-intro-title">A partida vai começar</h2>
+        <p id="match-players"></p>
+        <p>As imagens desta partida foram embaralhadas e estão cobertas. Clique em Começar para revelá-las. Quem souber primeiro, escolha o card dessa pessoa, revele as respostas e compare. Um acerto vale 1 ponto; um erro tira uma vida e devolve o produto ao fim da fila. Não há cronômetro.</p>
+        <p>A partida termina quando todos perderem as vidas ou quando as 30 imagens forem resolvidas.</p>
+        <button class="submit-answer" id="begin-match" type="button">Começar</button>
+      </div>
+    </section>
+
+    <section class="mp-tiebreaker-backdrop" id="tiebreaker-modal" role="dialog" aria-modal="true" aria-labelledby="tiebreaker-title" hidden>
+      <div class="mp-tiebreaker-card">
+        <p class="eyebrow">DISPUTA DE VELOCIDADE</p><h2 id="tiebreaker-title">Quem respondeu primeiro?</h2>
+        <div class="mp-duel-picks">
+          <label>Quem escolhe o 1?
+            <select id="player-for-one"><option value="">Escolha um jogador</option></select>
+          </label>
+          <label>Quem escolhe o 2?
+            <select id="player-for-two"><option value="">Escolha um jogador</option></select>
+          </label>
+        </div>
+        <div class="roulette-wrapper">
+          <span class="roulette-pointer" aria-hidden="true"></span>
+          <div class="roulette" id="roulette-wheel"><span class="roulette-half roulette-one" id="roulette-one">1</span><span class="roulette-half roulette-two" id="roulette-two">2</span></div>
+        </div>
+        <button class="submit-answer" id="spin-roulette" type="button">Girar desempate</button>
+        <p class="roulette-result" id="roulette-result" role="status" aria-live="polite"></p>
+        <button class="submit-answer" id="accept-tiebreak" type="button" hidden>Continuar com quem venceu</button>
+      </div>
+    </section>
+
+    <section class="mp-missing" id="missing-players" hidden>
+      <h1>Nenhum jogador configurado</h1><p>Volte ao menu Multiplayer para escolher os participantes desta partida.</p>
+      <a class="submit-answer" href="say-my-name.html">Configurar jogadores</a>
+    </section>
+  </main>
+  <script src="produtos.js"></script>
+  <script src="multiplayer.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

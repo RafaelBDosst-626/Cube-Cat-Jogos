@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Say my name! — Inverso</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="classico.css">
+  <link rel="stylesheet" href="inverso.css">
+</head>
+<body>
+  <main class="classic-game" id="inverse-game" aria-hidden="true" inert>
+    <header class="game-header">
+      <div><p class="eyebrow">SAY MY NAME!</p><h1>Modo inverso</h1></div>
+      <div class="game-stats" aria-live="polite">
+        <div class="stat"><span>Tempo</span><strong id="timer">40</strong></div>
+        <div class="stat lives-stat"><span>Vidas</span><strong id="lives" aria-label="3 vidas restantes"><span class="heart alive-cyan" aria-hidden="true">♥</span><span class="heart alive-cyan" aria-hidden="true">♥</span><span class="heart alive-cyan" aria-hidden="true">♥</span></strong></div>
+      </div>
+    </header>
+    <div class="round-info" id="round-info">Produto 1</div>
+    <p class="accent-notice" id="accent-notice" role="status" aria-live="polite" hidden></p>
+    <section class="image-pair" aria-label="Imagem do produto e revelação da marca">
+      <div class="image-card product-card" id="inverse-product-card"><h2>Produto</h2><div class="image-window" id="product-image" role="img" aria-label="Imagem do produto"><img id="product-photo" alt="" hidden><span id="product-visual" aria-hidden="true">📦</span><span class="cover" aria-hidden="true"></span></div></div>
+      <div class="image-card brand-card" id="brand-card"><h2>Marca</h2><div class="image-window" id="brand-image" role="img" aria-label="Logo da marca"><img id="brand-photo" alt="" hidden><span id="brand-visual" aria-hidden="true">🏷️</span></div></div>
+      <p class="brand-summary" id="inverse-summary" hidden></p>
+    </section>
+    <form id="answer-form" novalidate>
+      <div class="answer-fields">
+        <label for="brand-answer">Nome da marca</label>
+        <input id="brand-answer" name="brand" type="text" autocomplete="off" placeholder="Digite o nome da marca" required>
+        <label for="product-answer">O que essa marca vende?</label>
+        <input id="product-answer" name="product" type="text" autocomplete="off" placeholder="Digite o nome do produto" required>
+      </div>
+      <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+      <div class="answer-actions"><button class="submit-answer" id="submit-answer" type="submit">Enviar resposta</button><button class="submit-answer next-answer" id="next-answer" type="button" hidden>Próximo</button></div>
+    </form>
+  </main>
+  <section class="game-over" id="game-over" hidden aria-live="polite">
+    <span class="game-over-icon" aria-hidden="true">✦</span><h1 id="end-title">Fim de jogo</h1><p id="end-message"></p>
+    <section class="session-scoreboard" aria-labelledby="scoreboard-title"><h2 id="scoreboard-title">Melhores tentativas desta sessão</h2><ol id="scoreboard-list"></ol></section>
+    <button class="restart-link" id="restart-game" type="button">Jogar de novo</button><a class="back-link" href="say-my-name.html">Voltar aos modos</a>
+  </section>
+  <section class="intro-backdrop" id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-title">
+    <div class="intro-card"><p class="eyebrow">SAY MY NAME!</p><h2 id="intro-title">Modo inverso</h2><p>O logo da marca ficará visível. Adivinhe o nome da marca e o produto que ela vende. Você tem 40 segundos por rodada e 3 vidas.</p><p>Uma resposta errada tira uma vida, mas você continua tentando. Ao acertar, a imagem do produto e um espaço para o resumo aparecem. Avance pelo botão <strong>Próximo</strong>. O jogo termina quando o tempo acaba ou as vidas se esgotam.</p><p>A primeira partida segue a ordem dos produtos. Em <strong>Jogar de novo</strong>, os produtos são embaralhados apenas dentro do próprio nível de dificuldade.</p><button class="submit-answer" id="start-game" type="button">Começar a jogar</button></div>
+  </section>
+  <script src="produtos.js"></script>
+  <script src="inverso.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

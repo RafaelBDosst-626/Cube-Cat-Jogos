@@ -1,0 +1,106 @@
+.app {
+  width: min(600px, calc(100% - 32px));
+  margin: clamp(16px, 6vh, 40px) auto;
+  padding: clamp(16px, 5vw, 30px);
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-panel-light);
+  border-radius: 10px;
+}
+
+.app h1 {
+  color: var(--neon-cyan);
+  font-size: 2rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-blue);
+  padding-bottom: 20px;
+}
+
+.quiz { padding: 20px 0; }
+
+.quiz-progress__header {
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.quiz-progress {
+  display: grid;
+  grid-template-columns: repeat(var(--question-count, 10), minmax(0, 1fr));
+  gap: 5px;
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+.quiz-progress__segment {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg-panel-light);
+  transition: background-color 220ms ease, box-shadow 220ms ease;
+}
+
+.quiz-progress__segment.is-correct {
+  background: var(--neon-cyan);
+}
+
+.quiz-progress__segment.is-incorrect {
+  background: var(--neon-red);
+  box-shadow: 0 0 8px rgba(224, 72, 61, 0.4);
+}
+
+.quiz-progress__segment.is-current {
+  background: var(--neon-yellow);
+  box-shadow: 0 0 8px rgba(232, 217, 74, 0.4);
+}
+
+.quiz h2 {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.btn {
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px;
+  background: var(--bg-panel-light);
+  color: var(--text-light);
+  border: 1px solid var(--border-blue);
+  border-radius: 6px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--bg-panel);
+  border-color: var(--neon-cyan);
+}
+
+.btn:disabled { cursor: not-allowed; }
+
+#next-btn {
+  display: none;
+  width: 150px;
+  margin: 20px auto 0;
+  padding: 10px 16px;
+  background: var(--bg-panel-light);
+  color: var(--neon-cyan);
+  border: 1px solid var(--border-blue);
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 420px) {
+  .quiz-progress { gap: 3px; }
+  .quiz-progress__segment { height: 6px; }
+  .app h1 { font-size: 1.55rem; }
+  .quiz h2 { font-size: 1rem; line-height: 1.4; }
+  .btn { padding: 12px 10px; }
+}
+
+#next-btn:hover { border-color: var(--neon-cyan); }
+.correct { background: #1d593d; border-color: #46c783; }
+.incorrect { background: #5b2929; border-color: var(--neon-red); }

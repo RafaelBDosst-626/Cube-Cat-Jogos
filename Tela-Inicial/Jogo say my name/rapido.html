@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Say my name! — Jogo rápido</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="classico.css">
+  <link rel="stylesheet" href="rapido.css">
+</head>
+<body>
+  <main class="classic-game time-cyan" id="fast-panel" aria-hidden="true" inert>
+    <header class="game-header">
+      <div><p class="eyebrow">SAY MY NAME!</p><h1>Jogo rápido</h1></div>
+      <div class="game-stats" aria-live="polite">
+        <div class="stat timer-stat"><span>Tempo</span><strong id="timer">120</strong><span class="bonus-popup" id="bonus-popup" aria-live="polite" hidden>+3</span></div>
+        <div class="stat"><span>Acertos</span><strong id="correct-count">0</strong></div>
+      </div>
+    </header>
+    <div class="timer-track" role="progressbar" aria-label="Tempo restante" aria-valuemin="0" aria-valuemax="120" aria-valuenow="120"><div class="timer-bar" id="timer-bar"></div></div>
+    <div class="round-info" id="round-info">Produto 1</div>
+    <section class="image-pair" aria-label="Imagem do produto e revelação da marca">
+      <div class="image-card product-card"><h2>Produto</h2><div class="image-window" id="product-image" role="img" aria-label="Imagem do produto"><img id="product-photo" alt="" hidden><span id="product-visual" aria-hidden="true">📦</span><span class="cover" aria-hidden="true"></span></div></div>
+      <div class="image-card brand-card" id="brand-card"><h2>Marca</h2><div class="image-window" id="brand-image" role="img" aria-label="Imagem da marca"><img id="brand-photo" alt="" hidden><span id="brand-visual" aria-hidden="true">🏷️</span></div></div>
+    </section>
+    <form id="answer-form" novalidate>
+      <div class="answer-fields">
+        <label for="product-answer">Nome do produto</label>
+        <input id="product-answer" name="product" type="text" autocomplete="off" placeholder="Digite o nome do produto" required>
+        <label for="brand-answer">Nome da marca</label>
+        <input id="brand-answer" name="brand" type="text" autocomplete="off" placeholder="Digite o nome da marca" required>
+      </div>
+      <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+      <button class="submit-answer" id="submit-answer" type="submit">Enviar resposta</button>
+    </form>
+  </main>
+  <section class="game-over" id="game-over" hidden aria-live="polite">
+    <span class="game-over-icon" aria-hidden="true">✦</span><h1>Tempo esgotado</h1><p id="end-message"></p>
+    <button class="restart-link" id="restart-game" type="button">Jogar novamente</button><a class="back-link" href="say-my-name.html">Voltar aos modos</a>
+  </section>
+  <section class="intro-backdrop" id="intro" role="dialog" aria-modal="true" aria-labelledby="intro-title">
+    <div class="intro-card"><p class="eyebrow">SAY MY NAME!</p><h2 id="intro-title">Jogo rápido</h2><p>Você tem 120 segundos para acertar o maior número de produtos possível. Cada acerto adiciona 3 segundos ao relógio.</p><p>Erros não tiram vidas nem penalizam o tempo; continue tentando a resposta. O relógio continua correndo enquanto você confere a marca e avança para a próxima rodada.</p><button class="submit-answer" id="start-game" type="button">Começar a jogar</button></div>
+  </section>
+  <script src="produtos.js"></script>
+  <script src="rapido.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

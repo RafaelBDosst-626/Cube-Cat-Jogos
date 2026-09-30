@@ -1,0 +1,7 @@
+.timer-stat { position: relative; }
+.timer-track { width: min(100%, 820px); height: 14px; margin: 16px auto 4px; overflow: hidden; border: 1px solid var(--timer-neon); border-radius: 999px; background: #11161c; box-shadow: 0 0 12px var(--timer-glow); transition: border-color .35s, box-shadow .35s; }
+.timer-bar { width: 100%; height: 100%; border-radius: inherit; background: var(--timer-neon); box-shadow: 0 0 12px var(--timer-glow); transition: width 1s linear, background-color .35s; }
+.bonus-popup { position: absolute; top: -26px; right: 10px; z-index: 2; color: var(--neon-cyan); font-size: 1.15rem; font-weight: 800; opacity: 0; pointer-events: none; }
+.bonus-popup[hidden] { display: none; }
+.bonus-popup.is-visible { animation: bonus-rise 1.1s ease-out forwards; }
+@keyframes bonus-rise { 0% { opacity: 0; transform: translateY(10px) scale(.8); } 18% { opacity: 1; transform: translateY(0) scale(1.12); } 72% { opacity: 1; transform: translateY(-8px) scale(1); } 100% { opacity: 0; transform: translateY(-18px) scale(.95); } }

@@ -1,0 +1,39 @@
+/* ============================================
+   Estilo específico da tela inicial (index.html)
+   ============================================ */
+
+.logo-principal {
+  display: block;
+  width: min(96px, 30vw);
+  height: auto;
+  margin: 24px auto 8px;
+}
+
+body > .titulo {
+  margin-top: 12px;
+}
+
+.quadro {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.linha-jogos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.btn-biblioteca {
+  width: 100%;
+}
+
+@media (max-width: 420px) {
+  .linha-jogos { grid-template-columns: 1fr; }
+  .quadro { padding-inline: 16px; }
+  .linha-jogos .btn-jogo { min-height: 88px; }
+}
