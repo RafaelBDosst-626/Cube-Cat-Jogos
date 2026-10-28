@@ -1,0 +1,45 @@
+.universe-home { width: min(1080px, calc(100% - 32px)); margin: clamp(30px, 7vh, 64px) auto 48px; }
+.universe-eyebrow { margin-bottom: 8px; color: var(--neon-cyan); font-size: .78rem; font-weight: 750; letter-spacing: .16em; text-align: center; text-transform: uppercase; }
+.universe-home > h1 { color: var(--text-light); font-size: clamp(2rem, 5vw, 3rem); text-align: center; }
+.universe-intro { max-width: 680px; margin: 12px auto 32px; color: var(--text-muted); line-height: 1.6; text-align: center; }
+.universe-topics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.universe-topic { display: flex; min-width: 0; flex-direction: column; padding: 22px; border: 1px solid var(--bg-panel-light); border-radius: 14px; background: linear-gradient(150deg, var(--bg-panel), #12171d 85%); }
+.topic-symbol { display: grid; width: 50px; height: 50px; margin-bottom: 14px; place-items: center; border: 1px solid color-mix(in srgb, var(--topic-color) 35%, transparent); border-radius: 13px; background: color-mix(in srgb, var(--topic-color) 9%, transparent); font-size: 1.7rem; }
+.universe-topic h2 { margin-bottom: 6px; color: var(--text-light); font-size: 1.2rem; }
+.universe-topic > p { min-height: 44px; margin-bottom: 18px; color: var(--text-muted); font-size: .92rem; line-height: 1.5; }
+.topic-stars { --topic-color: #76c9ff; }
+.topic-planets { --topic-color: #c2a0ff; }
+.topic-habitable { --topic-color: #58d5a0; }
+.topic-galaxies { --topic-color: #d59bff; }
+.difficulty-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: auto; }
+.difficulty { display: flex; min-width: 0; min-height: 56px; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; padding: 8px 10px; border: 1px solid transparent; border-radius: 9px; color: #f7fafc; font-size: .85rem; font-weight: 750; text-decoration: none; transition: transform .16s ease, border-color .16s ease, filter .16s ease; }
+.difficulty span { color: currentColor; font-size: .67rem; font-weight: 550; opacity: .82; }
+.difficulty:hover, .difficulty:focus-visible { transform: translateY(-2px); filter: brightness(1.13); outline: 2px solid currentColor; outline-offset: 2px; }
+.difficulty-easy { border-color: #42a8f544; background: linear-gradient(145deg, #125b8c, #123b67); }
+.difficulty-medium { border-color: #a987ff55; background: linear-gradient(145deg, #513a82, #322758); }
+.difficulty-hard { border-color: #8b8f9a55; background: linear-gradient(145deg, #292d36, #15181e); color: #f0d77a; }
+.universe-topic { position: relative; transition: border-color .2s ease, box-shadow .2s ease; }
+.universe-topic[data-award="bronze"] { border-color: #b9784e; box-shadow: 0 0 12px #b9784e20; }
+.universe-topic[data-award="silver"] { border-color: #aebdcd; box-shadow: 0 0 14px #aebdcd28; }
+.universe-topic[data-award="gold"] { border-color: #e5c65d; box-shadow: 0 0 16px #e5c65d30; }
+.universe-topic[data-award="black"] { border: 2px solid transparent; background: linear-gradient(150deg, #171522, #0b0d13 85%) padding-box, radial-gradient(ellipse at center, #050609 5%, #292044 42%, #704db0 65%, #27a9bd 82%, #08090d 100%) border-box; box-shadow: 0 0 20px #130d26, 0 0 30px #2e9ba522; }
+.topic-award { position: absolute; top: 18px; right: 20px; display: grid; min-width: 34px; height: 34px; padding: 0 7px; place-items: center; border: 1px solid #ffffff35; border-radius: 999px; background: #0e1116; font-size: 1rem; }
+.universe-topic[data-award="bronze"] .topic-award { color: #d89a68; }
+.universe-topic[data-award="silver"] .topic-award { color: #c9d5e3; }
+.universe-topic[data-award="gold"] .topic-award { color: #f0d77a; }
+.universe-topic[data-award="black"] .topic-award { border-color: #ab8cff; color: #e2d1ff; box-shadow: 0 0 12px #ab8cff55; }
+.difficulty[data-award="bronze"] { border-color: #b9784e; box-shadow: inset 0 0 0 1px #b9784e44; }
+.difficulty[data-award="silver"] { border-color: #aebdcd; box-shadow: inset 0 0 0 1px #aebdcd44; }
+.difficulty[data-award="gold"] { border-color: #e5c65d; box-shadow: inset 0 0 0 1px #e5c65d44; }
+.difficulty-record { margin-top: 2px; font-size: .62rem !important; }
+.difficulty[data-award] { min-height: 68px; }
+
+@media (max-width: 680px) {
+  .universe-topics { grid-template-columns: 1fr; gap: 12px; }
+  .universe-topic { padding: 18px; }
+  .universe-topic > p { min-height: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .difficulty { transition: none; }
+}

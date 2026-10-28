@@ -10,7 +10,7 @@ const produtosMarcas = [
   { marca: "Nescau", produto: "achocolatado em pó", dificuldade: 1, imagem: "nivel1/chocolateEmPo.png", marcaImagem: "nivel1/nescau.png", historia: "A Nestlé lançou Nescau no Brasil em 1932 como bebida de cacau em pó; a marca tornou-se uma forma coloquial de pedir achocolatado." },
   { marca: "Durex", produto: "fita adesiva", dificuldade: 1, imagem: "nivel1/FitaAdesiva.png", marcaImagem: "nivel1/Durex.png", historia: "A fita adesiva transparente foi desenvolvida por Richard Drew, da 3M, em 1930; Durex é uma das marcas que se popularizaram para nomear fitas adesivas." },
   { marca: "Band-Aid", produto: "curativo adesivo", dificuldade: 1, imagem: "nivel1/CurativoAdesivo.png", marcaImagem: "nivel1/BandAid.png", historia: "Earle Dickson, da Johnson & Johnson, inventou o curativo adesivo pronto em 1920 para que sua esposa pudesse cuidar de pequenos cortes sozinha." },
-  { marca: "Maisena", produto: "amido de milho", dificuldade: 1, imagem: "nivel1/AmidoDeMilho.png", marcaImagem: "nivel1/maizena.png", historia: "O amido de milho já era produzido antes da marca; a marca Maizena foi criada pela empresa Glen Cove em 1856 e popularizada no Brasil como nome do ingrediente." },
+  { marca: "Maizena", produto: "amido de milho", dificuldade: 1, imagem: "nivel1/AmidoDeMilho.png", marcaImagem: "nivel1/maizena.png", historia: "O amido de milho já era produzido antes da marca; a marca Maizena foi criada pela empresa Glen Cove em 1856 e popularizada no Brasil como nome do ingrediente." },
   { marca: "Xerox", produto: "fotocópia", dificuldade: 2, imagem: "nivel2/fotocopiadora.png", marcaImagem: "nivel2/xerox.png", historia: "Chester Carlson inventou a xerografia em 1938; a Xerox comercializou a primeira copiadora automática de papel comum em 1959, e seu nome virou sinônimo de fotocópia." },
   { marca: "Jacuzzi", produto: "banheira de hidromassagem", dificuldade: 2, imagem: "nivel2/banheira.png", marcaImagem: "nivel2/Jacuzzi.png", historia: "Candido Jacuzzi e sua família desenvolveram uma bomba portátil para hidroterapia nos anos 1950; Roy Jacuzzi adaptou a ideia para banheiras em 1968." },
   { marca: "Leite Moça", produto: "leite condensado", dificuldade: 2, imagem: "nivel2/leiteCondensado.png", marcaImagem: "nivel2/moca.png", historia: "Gail Borden patenteou um método de conservar leite por condensação em 1856; a Nestlé lançou a marca brasileira Leite Moça em 1921." },
@@ -63,7 +63,7 @@ const descricoesProdutos = {
   Nescau: "Achocolatado em pó é uma mistura de açúcar, cacau e outros ingredientes para preparar bebida com leite; não é o mesmo que cacau puro.",
   Durex: "Fita adesiva é uma tira flexível com uma face coberta por adesivo, usada para unir, fixar ou vedar objetos leves.",
   "Band-Aid": "Curativo adesivo é uma pequena cobertura estéril presa a uma faixa adesiva, usada para proteger cortes e arranhões superficiais.",
-  Maisena: "Amido de milho é o pó extraído do grão de milho, usado para engrossar receitas e em preparações culinárias.",
+  Maizena: "Amido de milho é o pó extraído do grão de milho, usado para engrossar receitas e em preparações culinárias.",
   Xerox: "Fotocópia é a reprodução de um documento por processo eletrofotográfico; Xerox é uma marca de copiadoras que ficou associada a esse serviço.",
   Jacuzzi: "Banheira de hidromassagem é uma tina com jatos que movimentam água e ar para criar massagem; Jacuzzi é uma marca, não o nome técnico do equipamento.",
   "Leite Moça": "Leite condensado é leite do qual parte da água foi retirada e ao qual se adiciona açúcar, resultando em um produto espesso e doce.",
@@ -106,12 +106,13 @@ const descricoesProdutos = {
   Walkman: "Tocador portátil de fita reproduz cassetes por meio de fones, permitindo ouvir música em movimento; Walkman é uma marca criada pela Sony."
 };
 
+const produtosScriptUrl = document.currentScript.src;
 window.sayMyNameProducts = produtosMarcas.map((item) => ({
   product: item.produto,
   brand: item.marca,
   difficulty: item.dificuldade,
-  image: `imgs/img-produto/${item.imagem}`,
-  brandImage: `imgs/img-marca/${item.marcaImagem}`,
+  image: new URL(`imgs/img-produto/${item.imagem}`, produtosScriptUrl).href,
+  brandImage: new URL(`imgs/img-marca/${item.marcaImagem}`, produtosScriptUrl).href,
   summary: `A marca ${item.marca} ficou tão conhecida que seu nome passou a ser usado informalmente para falar também de produtos semelhantes. Esse processo é chamado de genericização da marca no uso cotidiano: uma marca muito lembrada começa a representar, na fala das pessoas, toda uma categoria, mesmo que existam produtos concorrentes. Na literatura, chamar o objeto pelo nome de sua marca é uma metonímia — troca-se o produto pelo nome de algo associado a ele. Isso descreve um uso da linguagem e não significa, por si só, que a marca tenha perdido sua proteção legal.\n\n${descricoesProdutos[item.marca]}\n\n${item.historia}`,
   imageAlt: `Imagem de ${item.produto}`,
   visual: "📦"

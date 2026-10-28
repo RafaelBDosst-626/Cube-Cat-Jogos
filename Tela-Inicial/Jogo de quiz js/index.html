@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escolha seu quiz | Cube Cat Jogos</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="Jogo1.css">
+</head>
+<body>
+  <div class="topbar">
+    <a href="../index.html" class="btn-voltar">&larr; Voltar</a>
+    <a href="../index.html" class="topbar-logo" aria-label="Voltar para a página inicial"><img src="../../assets/logo.png" alt=""></a>
+  </div>
+
+  <main class="quiz-home">
+    <p class="quiz-home__eyebrow">Cube Cat Jogos apresenta</p>
+    <h1 class="quiz-home__title">Escolha seu quiz</h1>
+    <p class="quiz-home__description">Escolha um tema e responda 10 perguntas. Qual deles você domina?</p>
+
+    <div class="quiz-cards">
+      <a class="quiz-card quiz-card--animation" href="../Animacoes/index.html" data-quiz-folder="animations">
+        <span class="quiz-card__emoji" aria-hidden="true">🎬</span>
+        <h2>Quizzes de Animação</h2>
+        <p>Escolha um estúdio, um filme ou conhecimento geral e avance pelos níveis.</p>
+        <div class="quiz-folder-badges" data-folder-badges="animations" aria-label="Insígnias de conclusão da pasta de animações">
+          <span class="quiz-folder-badge" data-level="easy" hidden>Fácil</span>
+          <span class="quiz-folder-badge" data-level="medium" hidden>Médio</span>
+          <span class="quiz-folder-badge" data-level="hard" hidden>Difícil</span>
+          <span class="quiz-folder-badge quiz-folder-badge--master" data-master-badge hidden></span>
+        </div>
+        <span class="quiz-card__action">Explorar quizzes <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="quiz-card quiz-card--games" href="Jogo1.html?quiz=jogos">
+        <span class="quiz-card__emoji" aria-hidden="true">🎮</span>
+        <h2>Quiz de Jogos Famosos</h2>
+        <p>Teste sua memória sobre jogos que todo mundo conhece.</p>
+        <span class="quiz-card__action">Jogar quiz <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="quiz-card quiz-card--space" href="../Universo/index.html" data-quiz-folder="universe">
+        <span class="quiz-card__emoji" aria-hidden="true">🚀</span>
+        <h2>Universo e espaço</h2>
+        <p>Escolha um tema do universo e avance do nível fácil ao difícil.</p>
+        <div class="quiz-folder-badges" data-folder-badges="universe" aria-label="Insígnias de conclusão da pasta do universo">
+          <span class="quiz-folder-badge" data-level="easy" hidden>Fácil</span>
+          <span class="quiz-folder-badge" data-level="medium" hidden>Médio</span>
+          <span class="quiz-folder-badge" data-level="hard" hidden>Difícil</span>
+          <span class="quiz-folder-badge quiz-folder-badge--master" data-master-badge hidden></span>
+        </div>
+        <span class="quiz-card__action">Explorar quizzes <span aria-hidden="true">→</span></span>
+      </a>
+    </div>
+  </main>
+
+  <footer><a class="footer-brand" href="../index.html">Cube Cat Software</a></footer>
+  <script src="quiz-progress.js"></script>
+  <script src="quiz-catalog.js"></script>
+  <script src="../../js/main.js"></script>
+  <script src="../../js/site-audio.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,19 @@
+.classic-game.is-started #inverse-product-card .cover { transform: translateY(0); }
+.classic-game #inverse-product-card.is-revealed .cover { transform: translateY(-102%); }
+
+#inverse-game {
+  width: min(780px, calc(100% - 32px));
+  margin: 16px auto;
+  padding: clamp(18px, 3vw, 24px);
+}
+
+#inverse-game .round-info { margin: 14px 0 8px; }
+#inverse-game .image-window { aspect-ratio: 1.5; }
+#inverse-game .answer-fields { margin-top: 14px; }
+#inverse-game .answer-fields input,
+#inverse-game .submit-answer { padding-top: 10px; padding-bottom: 10px; }
+
+@media (max-width: 520px) {
+  #inverse-game .image-window { aspect-ratio: .9; }
+}
+#inverse-product-card.is-resetting .cover { transition: none; }

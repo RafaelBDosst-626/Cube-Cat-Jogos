@@ -1,0 +1,15 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1264" height="1679" viewBox="0 0 1264 1679" fill="none">
+
+  <g transform="translate(12 200)">
+    <path d="M620 0 1165 272v555L620 1118 75 827V272L620 0Z" fill="#181D24" stroke="#232A33" stroke-width="30"/>
+    <path d="M620 49 1120 299v501L620 1067 120 800V299L620 49Z" fill="#03090F"/>
+    <path d="M620 49v500M120 800l500-251 500 251" stroke="#000" stroke-width="2"/>
+<path d="m78 831 544 269-76 149L0 978l78-147Z" fill="#090909" stroke="#303030" stroke-width="8"/>
+    <path d="m1162 831-544 269 77 149 545-271-78-147Z" fill="#090909" stroke="#303030" stroke-width="8"/>
+    <text x="305" y="1089" fill="#FFFF00" font-family="Georgia, 'Times New Roman', serif" font-size="100" text-anchor="middle" transform="rotate(29.5 305 1089)">Cube Cat</text>
+    <text x="927" y="1089" fill="#FFFF00" font-family="Georgia, 'Times New Roman', serif" font-size="100" text-anchor="middle" transform="rotate(-29.5 927 1089)">Software</text>
+  </g>
+</svg>
+
+
+
