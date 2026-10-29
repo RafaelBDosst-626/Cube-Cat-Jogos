@@ -65,8 +65,7 @@
     return readProgress().records?.[quizId]?.[level] || null;
   }
 
-  function getQuizAward(quizId) {
-    const progress = readProgress();
+  function getQuizAward(quizId, progress = readProgress()) {
     if (progress.blackBorders?.[quizId]) return "black";
     const levelMedals = Object.keys(pointsPerAnswer).map((level) => progress.records?.[quizId]?.[level]?.medal || "");
     if (levelMedals.some((medal) => !medal)) return "";
@@ -75,10 +74,15 @@
 
   function getFolderAwards(quizIds) {
     const progress = readProgress();
+    const medalRank = { bronze: 0, silver: 1, gold: 2, black: 2 };
+    const quizRanks = quizIds.map((quizId) => medalRank[getQuizAward(quizId, progress)] ?? -1);
+    const allAtLeast = (medal) => quizRanks.length > 0
+      && quizRanks.every((rank) => rank >= medalRank[medal]);
+
     return {
-      easy: quizIds.every((quizId) => Boolean(progress.records?.[quizId]?.easy?.medal)),
-      medium: quizIds.every((quizId) => Boolean(progress.records?.[quizId]?.medium?.medal)),
-      hard: quizIds.every((quizId) => Boolean(progress.records?.[quizId]?.hard?.medal)),
+      bronze: allAtLeast("bronze"),
+      silver: allAtLeast("silver"),
+      gold: allAtLeast("gold"),
       master: quizIds.length > 0 && quizIds.every((quizId) => Boolean(progress.blackBorders?.[quizId])),
     };
   }

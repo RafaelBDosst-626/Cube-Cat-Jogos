@@ -2,7 +2,7 @@
   const progress = window.CubeCatQuizProgress;
   if (!progress) return;
 
-  const medalIcons = { bronze: "🥉", silver: "🥈", gold: "🥇" };
+  const medalIcons = { bronze: "\u{1F949}", silver: "\u{1F948}", gold: "\u{1F947}" };
 
   document.querySelectorAll(".animation-topic, .universe-topic").forEach((topic) => {
     const firstQuizLink = topic.querySelector(".difficulty[href]");
@@ -14,9 +14,9 @@
     if (award) {
       const badge = document.createElement("span");
       badge.className = "topic-award";
-      badge.textContent = award === "black" ? "✦" : medalIcons[award];
+      badge.textContent = award === "black" ? "\u2726" : medalIcons[award];
       badge.title = award === "black"
-        ? "Easter egg: perfeito em Fácil, Médio e Difícil, em sequência."
+        ? "Recompensa especial desbloqueada."
         : `Melhor medalha: ${progress.medalLabels[award]}`;
       badge.setAttribute("role", "img");
       badge.setAttribute("aria-label", badge.title);
@@ -28,7 +28,7 @@
       const record = progress.getLevelRecord(quizId, params.get("difficulty"));
       if (!record) return;
       link.dataset.award = record.medal;
-      link.title = `${progress.medalLabels[record.medal]} — recorde de ${record.bestScore} pontos`;
+      link.title = `${progress.medalLabels[record.medal]} \u2014 recorde de ${record.bestScore} pontos`;
       const score = document.createElement("span");
       score.className = "difficulty-record";
       score.textContent = `${medalIcons[record.medal]} ${record.bestScore} pts`;
@@ -43,22 +43,36 @@
     const awards = progress.getFolderAwards(quizIds);
     const folderCard = badges.closest("[data-quiz-folder]");
 
-    Object.entries({ easy: "Fáceis", medium: "Médios", hard: "Difíceis" }).forEach(([level, label]) => {
-      const badge = badges.querySelector(`[data-level="${level}"]`);
-      badge.hidden = !awards[level];
-      if (awards[level]) {
-        badge.textContent = `🏅 ${label}`;
-        badge.title = `Ganhou Bronze ou melhor em todos os quizzes no nível ${label.toLowerCase()}`;
+    ["bronze", "silver", "gold"].forEach((medal) => {
+      const badge = badges.querySelector(`[data-medal="${medal}"]`);
+      const label = progress.medalLabels[medal];
+      badge.hidden = !awards[medal];
+      if (awards[medal]) {
+        badge.textContent = `${medalIcons[medal]} Medalha ${label}`;
+        badge.title = `Medalha ${label} em todos os quizzes e dificuldades da categoria`;
       }
     });
 
     const masterBadge = badges.querySelector("[data-master-badge]");
+    const masterMessage = badges.querySelector("[data-master-message]");
     masterBadge.hidden = !awards.master;
+    masterMessage.hidden = !awards.master || folderId === "animations";
     if (awards.master) {
-      const title = folderId === "universe" ? "O mestre do universo" : "Mestre da animação";
-      masterBadge.textContent = folderId === "universe" ? "🌌 O mestre do universo" : "🎬 Mestre da animação";
-      masterBadge.title = title;
-      masterBadge.setAttribute("aria-label", title);
+      const specialAward = folderId === "universe"
+        ? {
+            icon: "\u{1F30C}",
+            label: "Guardião do Cosmos",
+            message: "Você desvendou os grandes mistérios do universo!",
+          }
+        : {
+            icon: "\u{1F3AC}",
+            label: "O que Walt diria?",
+            message: "Você é um verdadeiro apreciador de animações: completou todos os quizzes com pontuação máxima. Deve ser bom em pegar referências!",
+          };
+      masterBadge.textContent = `${specialAward.icon} ${specialAward.label}`;
+      masterBadge.title = specialAward.message;
+      masterBadge.setAttribute("aria-label", `${specialAward.label}. ${specialAward.message}`);
+      masterMessage.textContent = specialAward.message;
       folderCard.dataset.folderMaster = folderId;
     }
   });

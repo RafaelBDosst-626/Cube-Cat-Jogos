@@ -137,6 +137,8 @@
 .quiz-folder-badge { padding: 5px 8px; border: 1px solid #e8d94a55; border-radius: 999px; background: #e8d94a12; color: #f0d77a; font-size: .68rem; font-weight: 750; }
 .quiz-folder-badge[hidden] { display: none; }
 .quiz-folder-badge--master { border-color: #ab8cff88; background: radial-gradient(circle, #422d6e, #12141d 75%); color: #e2d1ff; }
+.quiz-folder-special-message { flex-basis: 100%; color: #e2d1ff; font-size: .72rem; line-height: 1.4; }
+.quiz-folder-special-message[hidden] { display: none; }
 .quiz-card[data-folder-master="universe"] { border: 2px solid transparent; background: linear-gradient(155deg, #171522, #0b0d13 85%) padding-box, radial-gradient(ellipse at center, #050609 5%, #292044 42%, #704db0 65%, #27a9bd 82%, #08090d 100%) border-box; box-shadow: 0 0 20px #130d26, 0 0 30px #2e9ba522; }
 .quiz-card[data-folder-master="animations"] { border: 2px solid transparent; background: linear-gradient(155deg, #17141a, #0b0d13 85%) padding-box, conic-gradient(from 30deg, #08090d, #563b71, #9d593d, #121015, #563b71, #08090d) border-box; box-shadow: 0 0 22px #25111b; }
 .quiz-card[data-folder-master]:hover { border-color: transparent; }

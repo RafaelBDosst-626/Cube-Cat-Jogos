@@ -223,7 +223,13 @@ function showQuestion() {
   const questionNo = currentQuestionIndex + 1;
   questionElement.textContent = `${questionNo}. ${currentQuestion.question}`;
 
-  currentQuestion.answers.forEach((answer) => {
+  const shuffledAnswers = [...currentQuestion.answers];
+  for (let index = shuffledAnswers.length - 1; index > 0; index--) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffledAnswers[index], shuffledAnswers[randomIndex]] = [shuffledAnswers[randomIndex], shuffledAnswers[index]];
+  }
+
+  shuffledAnswers.forEach((answer) => {
     const button = document.createElement("button");
     button.textContent = answer.text;
     button.classList.add("btn");
@@ -281,7 +287,6 @@ function showScore() {
   resetState();
   updateProgress(true);
   window.CubeCatAudio?.playEffect("gameOver");
-  const wasActivePerfectRun = activePerfectRun;
   const result = window.CubeCatQuizProgress.recordAttempt({
     quizId: selectedQuiz,
     level: activeDifficulty,
@@ -332,25 +337,12 @@ function showScore() {
       ? "Você ganhou uma medalha, mas o navegador não permitiu gravar o recorde."
       : "Recorde ainda não salvo. Alcance pelo menos 6 acertos para ganhar Bronze.";
   }
-  if (easterEggUnlocked) {
-    scoreAward.textContent += " ✦ Borda galáctica desbloqueada: você fez 10/10 em Fácil, Médio e Difícil, em sequência!";
-  }
+  if (easterEggUnlocked) scoreAward.textContent += " ✦ Recompensa especial desbloqueada!";
   if (thematicQuiz) {
-    if (wrongInRound) {
-      perfectRunStatus.textContent = "Você errou uma resposta: a sequência perfeita foi cancelada. Para tentar a borda preta, recomece no Fácil e acerte todas as 30 perguntas.";
-    } else if (easterEggUnlocked) {
-      perfectRunStatus.textContent = "Sequência perfeita concluída! A borda preta deste quiz foi gravada.";
-    } else if (activeDifficulty === "easy" && score === 10) {
-      perfectRunStatus.textContent = "Rodada perfeita! Use “Continuar: nível Médio” para manter esta sequência.";
-    } else if (activeDifficulty === "easy") {
-      perfectRunStatus.textContent = "A sequência da borda preta exige 10/10 no Fácil. Reinicie este nível para tentar de novo.";
-    } else if (wasActivePerfectRun && activeDifficulty === "medium" && score === 10) {
-      perfectRunStatus.textContent = "Perfeito! Use “Continuar: nível Difícil” para completar a sequência.";
-    } else if (wasActivePerfectRun && activeDifficulty === "hard" && score === 10) {
-      perfectRunStatus.textContent = "Sequência perfeita concluída!";
-    } else {
-      perfectRunStatus.textContent = "Para tentar a borda preta, comece no Fácil e avance pelos botões “Continuar” sem errar.";
-    }
+    if (easterEggUnlocked) perfectRunStatus.textContent = "Recompensa especial desbloqueada!";
+    else if (score === questions.length) perfectRunStatus.textContent = "Rodada perfeita!";
+    else if (wrongInRound) perfectRunStatus.textContent = "Rodada concluída.";
+    else perfectRunStatus.textContent = "Boa rodada!";
   } else {
     perfectRunStatus.textContent = "";
   }
