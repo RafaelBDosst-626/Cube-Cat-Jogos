@@ -9,8 +9,16 @@
 .mp-feedback { min-height: 24px; margin-top: 12px; color: var(--neon-red); font-size: .9rem; }
 .mp-game { padding: clamp(16px, 3vw, 30px); }
 .mp-play-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(250px, .8fr); align-items: start; gap: 16px; }
+.mp-game.is-team-side-layout .mp-play-layout { grid-template-columns: minmax(175px, .58fr) minmax(0, 1.84fr) minmax(175px, .58fr); align-items: stretch; }
 .mp-content-panel, .mp-participants-panel { min-width: 0; padding: clamp(12px, 2vw, 20px); border: 1px solid var(--bg-panel-light); border-radius: 14px; background: #141a20; }
 .mp-participants-panel { position: sticky; top: 16px; }
+.mp-team-side { --team-neon: var(--neon-cyan); display: grid; min-width: 0; align-content: start; gap: 10px; padding: clamp(10px, 1.5vw, 16px); border: 1px solid color-mix(in srgb, var(--team-neon) 72%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--team-neon) 8%, #141a20); box-shadow: 0 0 24px color-mix(in srgb, var(--team-neon) 25%, transparent), inset 0 0 18px color-mix(in srgb, var(--team-neon) 10%, transparent); }
+.mp-team-side-left { --team-neon: #ff3b5c; }
+.mp-team-side-right { --team-neon: #31aaff; }
+.mp-team-side .mp-panel-title { margin: 0; color: var(--team-neon); text-align: center; text-shadow: 0 0 12px color-mix(in srgb, var(--team-neon) 55%, transparent); }
+.mp-team-card-slot .mp-player-card { align-content: start; height: 100%; text-align: center; }
+.mp-team-card-slot .mp-player-avatar { justify-self: center; }
+.mp-team-card-slot .mp-player-name { overflow-wrap: anywhere; white-space: normal; }
 .mp-panel-title { margin: 0 0 12px; color: var(--neon-cyan); font-size: 1rem; }
 .mp-header { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 20px; }
 .mp-header h1 { margin: 0; font-size: clamp(1.5rem, 4vw, 2rem); }
@@ -26,9 +34,11 @@
 .mp-player-card:hover { transform: translateY(-2px); }
 .mp-player-card.is-selected { border-color: var(--player-neon); box-shadow: 0 0 18px color-mix(in srgb, var(--player-neon) 55%, transparent), inset 0 0 12px color-mix(in srgb, var(--player-neon) 16%, transparent); }
 .mp-player-card.is-out { opacity: .48; }
+.mp-game.is-team-mode .mp-player-card { background: color-mix(in srgb, var(--player-neon) 9%, #141a20); }
 .mp-player-select, .mp-first-claim { min-height: 38px; padding: 7px 9px; border: 1px solid color-mix(in srgb, var(--player-neon) 65%, transparent); border-radius: 7px; background: #10151a; color: var(--player-neon); font: inherit; font-size: .82rem; font-weight: 700; cursor: pointer; }
 .mp-player-select:hover:not(:disabled), .mp-first-claim:hover:not(:disabled), .mp-first-claim[aria-pressed="true"] { background: color-mix(in srgb, var(--player-neon) 18%, #10151a); box-shadow: 0 0 12px color-mix(in srgb, var(--player-neon) 35%, transparent); }
 .mp-player-select:disabled, .mp-first-claim:disabled { opacity: .45; cursor: default; }
+.mp-player-avatar { justify-self: start; margin-bottom: 2px; }
 .mp-player-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mp-player-points { color: var(--text-muted); font-size: .85rem; }
 .mp-player-lives { position: relative; display: flex; gap: 4px; color: var(--neon-cyan); font-size: 1.1rem; }
@@ -84,4 +94,4 @@
 @media (max-width: 480px) { .player-name-fields, .mp-answer-pair { grid-template-columns: 1fr; } .mp-images { gap: 9px; } .mp-images .image-window { aspect-ratio: .9; } .mp-images .image-card h2 { font-size: .75rem; } .mp-judgement { grid-template-columns: 1fr; } .mp-judgement p { grid-column: auto; } }
 @media (max-width: 360px) { .mp-shell { width: calc(100% - 20px); margin: 12px auto; } .mp-game { padding: 12px; } .player-cards { gap: 7px; } .mp-player-card { padding: 9px; } .mp-player-select, .mp-first-claim { padding-inline: 5px; font-size: .72rem; } .mp-round-stat { min-width: 0; flex: 1; } .mp-intro-backdrop, .mp-tiebreaker-backdrop { padding: 12px; } .mp-tiebreak-card { padding: 18px 14px; } .roulette-wrapper, .roulette { width: 180px; } }
 @media (max-width: 420px) { .mp-duel-picks { grid-template-columns: 1fr; gap: 9px; } }
-@media (max-width: 850px) { .mp-play-layout { grid-template-columns: 1fr; } .mp-participants-panel { position: static; } .player-cards { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); max-height: none; overflow: visible; } }
+@media (max-width: 850px) { .mp-play-layout, .mp-game.is-team-side-layout .mp-play-layout { grid-template-columns: 1fr; } .mp-participants-panel { position: static; } .player-cards { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); max-height: none; overflow: visible; } }

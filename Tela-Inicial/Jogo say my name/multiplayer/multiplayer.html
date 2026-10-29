@@ -15,9 +15,15 @@
         <div><p class="eyebrow">SAY MY NAME!</p><h1>Multiplayer</h1></div>
         <div class="mp-round-stat"><span>Imagem</span><strong id="round-number">1 / 30</strong></div>
         <div class="mp-round-stat"><span>Resolvidas</span><strong id="solved-count">0 / 30</strong></div>
+        <div class="mp-round-stat" id="tournament-round-stat" hidden><span>Fase</span><strong id="tournament-round-label"></strong></div>
+        <div class="mp-round-stat mp-sudden-death-stat" id="sudden-death-stat" hidden><span>Morte súbita · relógio comum</span><strong id="sudden-death-timer">10 s</strong></div>
       </header>
 
       <div class="mp-play-layout">
+        <aside class="mp-team-side mp-team-side-left" id="team-side-left" aria-label="Time do lado esquerdo" hidden>
+          <h2 class="mp-panel-title">Lado esquerdo</h2>
+          <section class="mp-team-card-slot" id="team-card-left"></section>
+        </aside>
         <section class="mp-content-panel" aria-label="Conteúdo da rodada">
           <section class="image-pair mp-images" aria-label="Produto e marca">
             <div class="image-card"><h2>Produto</h2><div class="image-window" role="img" aria-label="Imagem do produto"><img id="product-photo" alt=""><span id="product-visual" aria-hidden="true">📦</span><span class="mp-image-cover" aria-hidden="true"></span></div></div>
@@ -41,9 +47,13 @@
           </div>
         </section>
 
-        <aside class="mp-participants-panel" aria-labelledby="participants-title">
+        <aside class="mp-participants-panel" id="participants-panel" aria-labelledby="participants-title">
           <h2 class="mp-panel-title" id="participants-title">Jogadores</h2>
           <section class="player-cards" id="player-cards" aria-label="Selecione quem respondeu primeiro"></section>
+        </aside>
+        <aside class="mp-team-side mp-team-side-right" id="team-side-right" aria-label="Time do lado direito" hidden>
+          <h2 class="mp-panel-title">Lado direito</h2>
+          <section class="mp-team-card-slot" id="team-card-right"></section>
         </aside>
       </div>
     </section>
@@ -59,8 +69,9 @@
       <div class="mp-intro-card">
         <p class="eyebrow">SAY MY NAME!</p><h2 id="match-intro-title">A partida vai começar</h2>
         <p id="match-players"></p>
+        <p id="match-format"></p>
         <p>As imagens desta partida foram embaralhadas e estão cobertas. Clique em Começar para revelá-las. Quem souber a resposta primeiro deve escolher o card correspondente; depois, revelem as respostas e confiram. Um acerto vale 1 ponto; um erro tira uma vida e devolve o produto ao fim da fila. Não há cronômetro.</p>
-        <p>A partida termina quando todos ficarem sem vidas ou quando as 30 imagens forem resolvidas.</p>
+        <p id="match-length"></p>
         <button class="submit-answer" id="begin-match" type="button">Começar</button>
       </div>
     </section>
@@ -92,6 +103,7 @@
     </section>
   </main>
   <script src="../produtos.js"></script>
+  <script src="../../../js/pixel-avatars.js"></script>
   <script src="multiplayer.js"></script>
   <script src="../../../js/main.js"></script>
   <script src="../../../js/site-audio.js"></script>

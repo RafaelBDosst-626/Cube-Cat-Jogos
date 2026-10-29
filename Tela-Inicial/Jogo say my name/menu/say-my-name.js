@@ -5,85 +5,145 @@ document.querySelectorAll(".mode-card[data-destination]").forEach((button) => {
 });
 
 const multiplayerCount = document.getElementById("mp-player-count");
-const multiplayerExtendedCount = document.getElementById("mp-player-count-more");
 const multiplayerCountLabel = document.getElementById("mp-count-label");
-const multiplayerExtendedCountLabel = document.getElementById("mp-count-more-label");
 const multiplayerCountTitleNoun = document.getElementById("mp-count-title-noun");
-const multiplayerNamesTitleNoun = document.getElementById("mp-names-title-noun");
+const multiplayerModeStep = document.getElementById("mp-mode-step");
 const multiplayerCountStep = document.getElementById("mp-count-step");
 const multiplayerNamesStep = document.getElementById("mp-names-step");
+const multiplayerModeAnswer = document.getElementById("mp-mode-answer");
+const multiplayerCountAnswer = document.getElementById("mp-count-answer");
 const multiplayerContinue = document.getElementById("mp-continue");
-const multiplayerNames = document.getElementById("mp-player-name-fields");
+const multiplayerRoster = document.getElementById("mp-participant-roster");
 const multiplayerFeedback = document.getElementById("mp-setup-feedback");
-const rememberedNames = { players: [], teams: [] };
+const multiplayerProductCount = document.getElementById("mp-product-count");
+const multiplayerFormatSettings = document.getElementById("mp-format-settings");
+const multiplayerVersusOption = document.getElementById("mp-versus-option");
+const multiplayerVersusUnavailable = document.getElementById("mp-versus-unavailable");
+const multiplayerVersusTwoDescription = document.getElementById("mp-versus-two-description");
+const multiplayerVersusFourDescription = document.getElementById("mp-versus-four-description");
 let selectedParticipantMode = "";
+let generatedTeamNames = [];
+
+const multiplayerSetupSteps = [multiplayerModeStep, multiplayerCountStep, multiplayerNamesStep];
+
+function activateSetupStep(activeStep) {
+  multiplayerSetupSteps.forEach((step) => {
+    const isActive = step === activeStep;
+    const isCompleted = !isActive && step.classList.contains("is-complete");
+    step.hidden = !isActive && !isCompleted;
+    step.open = isActive;
+    step.classList.toggle("is-active", isActive);
+    if (isActive) step.classList.remove("is-complete");
+  });
+}
+
+function completeSetupStep(step, answer, description, nextStep) {
+  answer.textContent = description;
+  step.classList.add("is-complete");
+  activateSetupStep(nextStep);
+}
+
+multiplayerSetupSteps.forEach((step) => {
+  step.addEventListener("toggle", () => {
+    if (!step.open) return;
+    multiplayerSetupSteps.forEach((otherStep) => {
+      if (otherStep !== step) otherStep.open = false;
+    });
+    step.classList.remove("is-complete");
+  });
+});
 
 function participantLabel(mode, plural = false) {
   if (mode === "teams") return plural ? "times" : "time";
   return plural ? "jogadores" : "jogador";
 }
 
-function saveCurrentNames() {
-  if (selectedParticipantMode) {
-    rememberedNames[selectedParticipantMode] = [...multiplayerNames.querySelectorAll("input")].map((input) => input.value);
+function createTeamNames(count) {
+  const firstParts = ["Zorpa", "Blim", "Teco", "Furbi", "Nanu", "Pipo", "Giga", "Quiru", "Malu", "Trombi"];
+  const lastParts = ["fuso", "quark", "bip", "tronha", "lito", "zuca", "plex", "dengo", "mático", "nex"];
+  const names = new Set();
+  while (names.size < count) {
+    const first = firstParts[Math.floor(Math.random() * firstParts.length)];
+    const last = lastParts[Math.floor(Math.random() * lastParts.length)];
+    names.add(`${first}${last}`);
   }
+  return [...names];
 }
 
 function updateParticipantCountLabels(mode) {
-  const isExtendedCount = multiplayerCount.value === "more";
   multiplayerCountLabel.textContent = `Quantidade de ${participantLabel(mode, true)}`;
-  multiplayerExtendedCountLabel.textContent = `Quantidade de ${participantLabel(mode, true)}`;
   multiplayerCountTitleNoun.textContent = participantLabel(mode, true);
-  multiplayerNamesTitleNoun.textContent = participantLabel(mode);
-  multiplayerExtendedCountLabel.hidden = !isExtendedCount;
-  multiplayerExtendedCount.hidden = !isExtendedCount;
   [...multiplayerCount.options].forEach((option) => {
-    if (option.value !== "more") {
-      option.textContent = `${option.value} ${participantLabel(mode, true)}`;
-    }
-  });
-  [...multiplayerExtendedCount.options].forEach((option) => {
     option.textContent = `${option.value} ${participantLabel(mode, true)}`;
+    option.hidden = false;
   });
 }
 
-function renderMultiplayerNameFields() {
-  const mode = selectedParticipantMode;
-  const isExtendedCount = multiplayerCount.value === "more";
-  const participantCount = isExtendedCount ? Number(multiplayerExtendedCount.value) : Number(multiplayerCount.value);
-  saveCurrentNames();
-  multiplayerFeedback.textContent = "";
-  multiplayerNames.replaceChildren();
-  for (let index = 0; index < participantCount; index += 1) {
-    const field = document.createElement("div");
-    field.className = "mp-player-field";
-    const label = document.createElement("label");
-    label.htmlFor = `mp-participant-${index}`;
-    label.textContent = `${mode === "teams" ? "Time" : "Jogador"} ${index + 1}`;
-    const input = document.createElement("input");
-    input.id = `mp-participant-${index}`;
-    input.type = "text";
-    input.maxLength = 24;
-    input.autocomplete = "off";
-    input.placeholder = `Nome do ${participantLabel(mode)} ${index + 1}`;
-    input.value = rememberedNames[mode][index] || "";
-    field.append(label, input);
-    multiplayerNames.append(field);
+function updateTeamFormatOptions() {
+  const teamCount = Number(multiplayerCount.value);
+  const canPlayVersus = selectedParticipantMode === "teams" && (teamCount === 2 || teamCount === 4);
+  multiplayerFormatSettings.hidden = selectedParticipantMode !== "teams";
+  multiplayerVersusOption.hidden = !canPlayVersus;
+  multiplayerVersusUnavailable.hidden = selectedParticipantMode !== "teams" || teamCount !== 3;
+  multiplayerVersusTwoDescription.hidden = teamCount !== 2;
+  multiplayerVersusFourDescription.hidden = teamCount !== 4;
+  if (!canPlayVersus) document.querySelector('input[name="mp-team-format"][value="all-play"]').checked = true;
+}
+
+function configuredParticipants(mode = selectedParticipantMode) {
+  const playerNames = ["Java", "Python", "Ruby", "C++"];
+  if (mode === "teams") {
+    const count = Number(multiplayerCount.value);
+    return generatedTeamNames.length === count ? [...generatedTeamNames] : createTeamNames(count);
   }
+  return playerNames.slice(0, Number(multiplayerCount.value));
+}
+
+function renderParticipantRoster() {
+  multiplayerRoster.replaceChildren();
+  multiplayerRoster.classList.toggle("is-team-roster", selectedParticipantMode === "teams");
+  const participantNames = configuredParticipants();
+  const teamColors = ["#ff3b5c", "#31aaff", "#ffe34d", "#39ef91"];
+  participantNames.forEach((name, index) => {
+    const card = document.createElement("article");
+    card.className = "mp-roster-card";
+    const avatar = window.CubeCatPixelAvatar.create(index);
+    if (selectedParticipantMode === "teams") {
+      card.classList.add("mp-roster-card-team");
+      card.style.setProperty("--team-neon", teamColors[index]);
+      if (participantNames.length === 2) {
+        card.classList.add(`team-side-${index === 0 ? "left" : "right"}`);
+        const side = document.createElement("span");
+        side.className = "mp-roster-side";
+        side.textContent = index === 0 ? "Lado esquerdo" : "Lado direito";
+        card.append(side);
+      }
+    }
+    const label = document.createElement("strong");
+    label.textContent = name;
+    card.append(avatar, label);
+    multiplayerRoster.append(card);
+  });
 }
 
 const participantModeButtons = document.querySelectorAll(".mp-mode-button");
 participantModeButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    saveCurrentNames();
-    selectedParticipantMode = button.dataset.mode;
+    const nextMode = button.dataset.mode;
+    selectedParticipantMode = nextMode;
+    if (selectedParticipantMode === "teams") generatedTeamNames = createTeamNames(Number(multiplayerCount.value));
     participantModeButtons.forEach((choice) => {
       choice.setAttribute("aria-pressed", String(choice === button));
     });
     updateParticipantCountLabels(selectedParticipantMode);
-    multiplayerCountStep.hidden = false;
-    multiplayerNamesStep.hidden = true;
-    multiplayerNames.replaceChildren();
+    updateTeamFormatOptions();
+    completeSetupStep(
+      multiplayerModeStep,
+      multiplayerModeAnswer,
+      selectedParticipantMode === "teams" ? "Times" : "Jogadores",
+      multiplayerCountStep
+    );
+    multiplayerRoster.replaceChildren();
     multiplayerFeedback.textContent = "";
   });
 });
@@ -97,41 +157,43 @@ document.querySelectorAll(".mp-help-button").forEach((button) => {
   });
 });
 
-function resetNamesStep() {
-  saveCurrentNames();
-  multiplayerNamesStep.hidden = true;
-  multiplayerNames.replaceChildren();
+function resetRosterStep() {
+  multiplayerRoster.replaceChildren();
+  if (selectedParticipantMode) activateSetupStep(multiplayerCountStep);
 }
 
 multiplayerCount.addEventListener("change", () => {
-  updateParticipantCountLabels(selectedParticipantMode);
-  resetNamesStep();
+  if (selectedParticipantMode === "teams") generatedTeamNames = createTeamNames(Number(multiplayerCount.value));
+  updateTeamFormatOptions();
+  resetRosterStep();
 });
-multiplayerExtendedCount.addEventListener("change", resetNamesStep);
 multiplayerContinue.addEventListener("click", () => {
   if (!selectedParticipantMode) return;
-  renderMultiplayerNameFields();
-  multiplayerNamesStep.hidden = false;
+  renderParticipantRoster();
+  updateTeamFormatOptions();
+  multiplayerFeedback.textContent = "";
+  const participantCount = configuredParticipants().length;
+  completeSetupStep(
+    multiplayerCountStep,
+    multiplayerCountAnswer,
+    `${participantCount} ${participantLabel(selectedParticipantMode, true)}`,
+    multiplayerNamesStep
+  );
 });
 document.getElementById("start-multiplayer").addEventListener("click", () => {
   const mode = selectedParticipantMode;
-  const participant = participantLabel(mode);
-  const names = [...multiplayerNames.querySelectorAll("input")].map((input) => input.value.trim());
-  if (names.some((name) => !name)) {
-    multiplayerFeedback.textContent = `Preencha o nome de todos os ${participantLabel(mode, true)}.`;
-    return;
-  }
-  if (new Set(names.map((name) => name.toLocaleLowerCase("pt-BR"))).size !== names.length) {
-    multiplayerFeedback.textContent = `Use um nome diferente para cada ${participant}.`;
-    return;
-  }
+  const names = configuredParticipants(mode);
   const destination = new URL("../multiplayer/multiplayer.html", window.location.href);
   try {
     sessionStorage.setItem("sayMyNameMultiplayerPlayers", JSON.stringify(names));
     sessionStorage.setItem("sayMyNameMultiplayerMode", mode);
+    sessionStorage.setItem("sayMyNameMultiplayerProductCount", multiplayerProductCount.value);
+    sessionStorage.setItem("sayMyNameMultiplayerCompetition", document.querySelector('input[name="mp-team-format"]:checked')?.value || "all-play");
   } catch {
     destination.searchParams.set("players", JSON.stringify(names));
     destination.searchParams.set("mode", mode);
+    destination.searchParams.set("productCount", multiplayerProductCount.value);
+    destination.searchParams.set("competition", document.querySelector('input[name="mp-team-format"]:checked')?.value || "all-play");
   }
   showLoadingScreen(destination.href);
 });

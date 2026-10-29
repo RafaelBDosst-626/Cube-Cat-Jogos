@@ -1,4 +1,10 @@
 .classic-game, .game-over { width: min(820px, calc(100% - 32px)); margin: 32px auto; padding: clamp(20px, 4vw, 32px); border: 1px solid var(--bg-panel-light); border-radius: 16px; background: var(--bg-panel); }
+.mp-retro-avatar { display: grid; width: 46px; height: 46px; flex: 0 0 auto; place-items: center; border: 2px solid currentColor; border-radius: 6px; background: #0c1217; box-shadow: 0 0 12px color-mix(in srgb, currentColor 25%, transparent), inset 0 0 0 2px #202b35; color: var(--avatar-color, var(--neon-cyan)); image-rendering: pixelated; }
+.mp-retro-avatar svg { display: block; width: 32px; height: 32px; overflow: visible; image-rendering: pixelated; }
+.mp-retro-avatar-1 { --avatar-color: #ffe34d; }
+.mp-retro-avatar-2 { --avatar-color: #39ef91; }
+.mp-retro-avatar-3 { --avatar-color: #ff3b5c; }
+.mp-retro-avatar-4 { --avatar-color: #31aaff; }
 .classic-game { --timer-neon: var(--neon-cyan); --timer-glow: rgba(61,219,224,.2); border-color: var(--timer-neon); box-shadow: 0 0 0 1px var(--timer-neon), 0 0 26px var(--timer-glow); transition: border-color .35s, box-shadow .35s; }
 .classic-game.time-yellow { --timer-neon: var(--neon-yellow); --timer-glow: rgba(232,217,74,.2); }
 .classic-game.time-red { --timer-neon: var(--neon-red); --timer-glow: rgba(224,72,61,.24); }

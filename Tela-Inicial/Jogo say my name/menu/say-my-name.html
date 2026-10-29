@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Say my name! — Cube Cat Jogos</title>
   <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../compartilhado/game-base.css">
   <link rel="stylesheet" href="say-my-name.css">
 </head>
-<body>
+<body class="say-page">
   <div class="topbar">
     <a href="../../index.html" class="btn-voltar">&larr; Voltar</a>
     <a href="../../index.html" class="topbar-logo" aria-label="Voltar para a página inicial"><img src="../../../assets/logo.png" alt=""></a>
@@ -47,46 +48,77 @@
           <span class="multiplayer-arrow" aria-hidden="true">⌄</span>
         </summary>
         <div class="multiplayer-setup">
-          <section class="mp-step" aria-labelledby="mp-mode-title">
-            <h3 class="mp-step-title" id="mp-mode-title">Como vocês vão jogar?</h3>
-            <div class="mp-mode-choices">
-              <div class="mp-mode-option">
-                <button class="mp-mode-button" type="button" data-mode="players" aria-pressed="false">Jogadores</button>
-                <button class="mp-help-button" type="button" aria-label="Sobre jogar como jogadores" aria-expanded="false" aria-controls="mp-help-players">?</button>
-                <p class="mp-help-text" id="mp-help-players" hidden>Cada pessoa joga por si e tem sua própria pontuação.</p>
-              </div>
-              <div class="mp-mode-option">
-                <button class="mp-mode-button" type="button" data-mode="teams" aria-pressed="false">Times</button>
-                <button class="mp-help-button" type="button" aria-label="Sobre jogar em times" aria-expanded="false" aria-controls="mp-help-teams">?</button>
-                <p class="mp-help-text" id="mp-help-teams" hidden>As pessoas formam equipes e cada time compartilha a pontuação.</p>
+          <details class="mp-step" id="mp-mode-step" open>
+            <summary class="mp-step-summary" id="mp-mode-summary">
+              <span class="mp-step-title" id="mp-mode-title">Como vocês vão jogar?</span>
+              <span class="mp-step-answer" id="mp-mode-answer"></span>
+            </summary>
+            <div class="mp-step-content">
+              <div class="mp-mode-choices">
+                <div class="mp-mode-option">
+                  <button class="mp-mode-button" type="button" data-mode="players" aria-pressed="false">Jogadores</button>
+                  <button class="mp-help-button" type="button" aria-label="Sobre jogar como jogadores" aria-expanded="false" aria-controls="mp-help-players">?</button>
+                  <p class="mp-help-text" id="mp-help-players" hidden>Cada pessoa joga por si e tem sua própria pontuação.</p>
+                </div>
+                <div class="mp-mode-option">
+                  <button class="mp-mode-button" type="button" data-mode="teams" aria-pressed="false">Times</button>
+                  <button class="mp-help-button" type="button" aria-label="Sobre jogar em times" aria-expanded="false" aria-controls="mp-help-teams">?</button>
+                  <p class="mp-help-text" id="mp-help-teams" hidden>As pessoas formam equipes e cada time compartilha a pontuação.</p>
+                </div>
               </div>
             </div>
-          </section>
+          </details>
 
-          <section class="mp-step" id="mp-count-step" aria-labelledby="mp-count-step-title" hidden>
-            <h3 class="mp-step-title" id="mp-count-step-title">Quantos <span id="mp-count-title-noun">jogadores</span>?</h3>
-            <label class="sr-only" for="mp-player-count" id="mp-count-label">Quantidade de jogadores</label>
-            <select id="mp-player-count"><option value="2">2 jogadores</option><option value="3">3 jogadores</option><option value="4">4 jogadores</option><option value="more">Mais de 4</option></select>
-            <label for="mp-player-count-more" id="mp-count-more-label" hidden>Escolha a quantidade</label>
-            <select id="mp-player-count-more" aria-label="Escolha uma quantidade de 5 a 10" hidden>
-              <option value="5">5 jogadores</option><option value="6">6 jogadores</option><option value="7">7 jogadores</option>
-              <option value="8">8 jogadores</option><option value="9">9 jogadores</option><option value="10">10 jogadores</option>
-            </select>
-            <button class="mp-next-button" id="mp-continue" type="button">Continuar</button>
-          </section>
+          <details class="mp-step" id="mp-count-step" hidden>
+            <summary class="mp-step-summary" id="mp-count-summary">
+              <span class="mp-step-title" id="mp-count-step-title">Quantos <span id="mp-count-title-noun">jogadores</span>?</span>
+              <span class="mp-step-answer" id="mp-count-answer"></span>
+            </summary>
+            <div class="mp-step-content">
+              <label class="sr-only" for="mp-player-count" id="mp-count-label">Quantidade de jogadores</label>
+              <select id="mp-player-count"><option value="2">2 jogadores</option><option value="3">3 jogadores</option><option value="4">4 jogadores</option></select>
+              <button class="mp-next-button" id="mp-continue" type="button">Continuar</button>
+            </div>
+          </details>
 
-          <section class="mp-step" id="mp-names-step" aria-labelledby="mp-names-title" hidden>
-            <h3 class="mp-step-title" id="mp-names-title">Dê um nome para cada <span id="mp-names-title-noun">jogador</span></h3>
-            <div id="mp-player-name-fields" class="mp-player-name-fields"></div>
-            <p id="mp-setup-feedback" class="mp-setup-feedback" role="status" aria-live="polite"></p>
-            <button class="mp-start-button" id="start-multiplayer" type="button">Começar a partida</button>
-          </section>
+          <details class="mp-step" id="mp-names-step" hidden>
+            <summary class="mp-step-summary">
+              <span class="mp-step-title" id="mp-names-title">Confira os participantes</span>
+              <span class="mp-step-answer">Pronto para jogar</span>
+            </summary>
+            <div class="mp-step-content">
+              <div id="mp-participant-roster" class="mp-participant-roster" aria-live="polite"></div>
+              <fieldset class="mp-format-settings" id="mp-format-settings" hidden>
+                <legend>Formato da partida</legend>
+                <div class="mp-format-option">
+                  <label><input type="radio" name="mp-team-format" value="all-play" checked> Contra todos</label>
+                  <p>Todos os times disputam juntos. O maior placar vence.</p>
+                </div>
+                <div class="mp-format-option" id="mp-versus-option">
+                  <label><input type="radio" name="mp-team-format" value="versus"> Versus</label>
+                  <p id="mp-versus-two-description" hidden>Os 2 times ficam em lados opostos e usam pelo menos 20 objetos. Se a primeira rodada empatar, a final inclui os objetos que faltavam. Se as duas rodadas empatarem, começa a morte súbita: 9 objetos e um cronômetro compartilhado.</p>
+                  <p id="mp-versus-four-description" hidden>Os 4 times formam 2 duelos de semifinal. Cada duelo usa pelo menos 20 objetos; em caso de empate, entram os que faltavam. Os vencedores se enfrentam na final com as dificuldades misturadas. Se a final empatar, há morte súbita com 9 objetos e cronômetro compartilhado.</p>
+                </div>
+                <p class="mp-format-note" id="mp-versus-unavailable" hidden>Versus está disponível para 2 ou 4 times. Com 3, a partida é Contra todos.</p>
+              </fieldset>
+              <label class="setup-label" for="mp-product-count">Quantidade de imagens</label>
+              <select id="mp-product-count">
+                <option value="20">20 imagens</option>
+                <option value="30" selected>30 imagens</option>
+                <option value="40">40 imagens</option>
+                <option value="all">Todas as imagens</option>
+              </select>
+              <p id="mp-setup-feedback" class="mp-setup-feedback" role="status" aria-live="polite"></p>
+              <button class="mp-start-button" id="start-multiplayer" type="button">Começar a partida</button>
+            </div>
+          </details>
         </div>
       </details>
     </section>
   </main>
 
   <footer>Cube Cat Software</footer>
+  <script src="../../../js/pixel-avatars.js"></script>
   <script src="say-my-name.js"></script>
   <script src="../../../js/main.js"></script>
   <script src="../../../js/site-audio.js"></script>

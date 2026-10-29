@@ -10,15 +10,18 @@
   };
   const MUSIC_MUTED_KEY = "cubeCatBackgroundMusicMutedV1";
   const MUSIC_TIME_KEY = "cubeCatBackgroundMusicTimeV1";
+  const ALL_AUDIO_MUTED_KEY = "cubeCatAllAudioMutedDevV1";
   const scriptUrl = document.currentScript.src;
   const music = new Audio(new URL(musicPath, scriptUrl));
   const button = document.createElement("button");
   const effects = new Map();
   let lastSavedAt = 0;
   let muted = false;
+  let allAudioMuted = false;
 
   try {
     muted = localStorage.getItem(MUSIC_MUTED_KEY) === "true";
+    allAudioMuted = localStorage.getItem(ALL_AUDIO_MUTED_KEY) === "true";
   } catch {
     // The on-screen control still works when storage is unavailable.
   }
@@ -26,7 +29,7 @@
   music.loop = true;
   music.preload = "auto";
   music.volume = 0.22;
-  music.muted = muted;
+  music.muted = muted || allAudioMuted;
 
   button.type = "button";
   button.className = "background-music-toggle";
@@ -52,14 +55,14 @@
   };
 
   const playMusic = () => {
-    if (muted) return;
+    if (muted || allAudioMuted) return;
     music.play().then(() => updateButton()).catch(() => updateButton(true));
   };
 
   button.addEventListener("click", () => {
     if (muted || music.paused) {
       muted = false;
-      music.muted = false;
+      music.muted = allAudioMuted;
       try {
         localStorage.setItem(MUSIC_MUTED_KEY, "false");
       } catch {
@@ -117,16 +120,30 @@
   window.CubeCatAudio = {
     playEffect(name) {
       const path = soundPaths[name];
-      if (!path) return;
+      if (!path || allAudioMuted) return;
       let sound = effects.get(name);
       if (!sound) {
         sound = new Audio(new URL(path, scriptUrl));
         sound.preload = "auto";
         sound.volume = 0.65;
+        sound.muted = allAudioMuted;
         effects.set(name, sound);
       }
       sound.currentTime = 0;
       sound.play().catch(() => {});
     },
+    setAllMuted(value) {
+      allAudioMuted = Boolean(value);
+      music.muted = muted || allAudioMuted;
+      effects.forEach((sound) => { sound.muted = allAudioMuted; });
+      try {
+        localStorage.setItem(ALL_AUDIO_MUTED_KEY, String(allAudioMuted));
+      } catch {
+        // Keep the setting for this page when storage is unavailable.
+      }
+      if (!allAudioMuted) playMusic();
+      return allAudioMuted;
+    },
+    isAllMuted() { return allAudioMuted; },
   };
 })();
