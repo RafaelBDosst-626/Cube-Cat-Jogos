@@ -2,25 +2,41 @@
   const progress = window.CubeCatQuizProgress;
   if (!progress) return;
 
-  const medalIcons = { bronze: "\u{1F949}", silver: "\u{1F948}", gold: "\u{1F947}" };
+  const medalIcons = { bronze: "\u2605", silver: "\u2605", gold: "\u2605" };
 
   document.querySelectorAll(".animation-topic, .universe-topic").forEach((topic) => {
     const firstQuizLink = topic.querySelector(".difficulty[href]");
     if (!firstQuizLink) return;
     const quizId = new URL(firstQuizLink.href).searchParams.get("quiz");
     const award = progress.getQuizAward(quizId);
+    const earnedMedals = progress.getQuizMedals(quizId);
     if (award) topic.dataset.award = award;
 
-    if (award) {
-      const badge = document.createElement("span");
-      badge.className = "topic-award";
-      badge.textContent = award === "black" ? "\u2726" : medalIcons[award];
-      badge.title = award === "black"
-        ? "Recompensa especial desbloqueada."
-        : `Melhor medalha: ${progress.medalLabels[award]}`;
-      badge.setAttribute("role", "img");
-      badge.setAttribute("aria-label", badge.title);
-      topic.append(badge);
+    if (earnedMedals.length || award === "black") {
+      const badges = document.createElement("span");
+      badges.className = "topic-awards";
+
+      earnedMedals.forEach((medal) => {
+        const badge = document.createElement("span");
+        badge.className = `topic-award topic-award--${medal}`;
+        badge.textContent = medalIcons[medal];
+        badge.title = `Insígnia ${progress.medalLabels[medal]} conquistada nas três dificuldades`;
+        badge.setAttribute("role", "img");
+        badge.setAttribute("aria-label", badge.title);
+        badges.append(badge);
+      });
+
+      if (award === "black") {
+        const specialBadge = document.createElement("span");
+        specialBadge.className = "topic-award topic-award--special";
+        specialBadge.textContent = "\u2726";
+        specialBadge.title = "Recompensa especial desbloqueada.";
+        specialBadge.setAttribute("role", "img");
+        specialBadge.setAttribute("aria-label", specialBadge.title);
+        badges.append(specialBadge);
+      }
+
+      topic.append(badges);
     }
 
     topic.querySelectorAll(".difficulty[href]").forEach((link) => {

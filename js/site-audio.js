@@ -102,7 +102,9 @@
   }, { once: true, capture: true });
 
   document.addEventListener("click", (event) => {
-    const target = event.target instanceof Element ? event.target.closest("button, .btn-jogo, .difficulty") : null;
+    const target = event.target instanceof Element
+      ? event.target.closest('button, input[type="button"], input[type="submit"], [role="button"], a[href]')
+      : null;
     if (!target || target.disabled || target.matches(".background-music-toggle, [data-no-sfx]")) return;
     window.CubeCatAudio.playEffect("button");
   });

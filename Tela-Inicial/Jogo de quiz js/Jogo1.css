@@ -135,6 +135,9 @@
 
 .quiz-folder-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
 .quiz-folder-badge { padding: 5px 8px; border: 1px solid #e8d94a55; border-radius: 999px; background: #e8d94a12; color: #f0d77a; font-size: .68rem; font-weight: 750; }
+.quiz-folder-badge[data-medal="bronze"] { border-color: #b9784e88; background: #b9784e22; color: #e3a579; }
+.quiz-folder-badge[data-medal="silver"] { border-color: #aebdcd99; background: #aebdcd20; color: #d9e2ec; }
+.quiz-folder-badge[data-medal="gold"] { border-color: #e5c65d99; background: #e5c65d20; color: #f0d77a; }
 .quiz-folder-badge[hidden] { display: none; }
 .quiz-folder-badge--master { border-color: #ab8cff88; background: radial-gradient(circle, #422d6e, #12141d 75%); color: #e2d1ff; }
 .quiz-folder-special-message { flex-basis: 100%; color: #e2d1ff; font-size: .72rem; line-height: 1.4; }

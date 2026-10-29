@@ -72,6 +72,13 @@
     return levelMedals.reduce((lowest, medal) => medals.indexOf(medal) < medals.indexOf(lowest) ? medal : lowest);
   }
 
+  function getQuizMedals(quizId, progress = readProgress()) {
+    const levelMedals = Object.keys(pointsPerAnswer).map((level) => progress.records?.[quizId]?.[level]?.medal || "");
+    if (levelMedals.some((medal) => !medal)) return [];
+    const lowestRank = Math.min(...levelMedals.map((medal) => medals.indexOf(medal)));
+    return medals.filter((_, rank) => rank <= lowestRank);
+  }
+
   function getFolderAwards(quizIds) {
     const progress = readProgress();
     const medalRank = { bronze: 0, silver: 1, gold: 2, black: 2 };
@@ -205,6 +212,7 @@
     recordAttempt,
     getLevelRecord,
     getQuizAward,
+    getQuizMedals,
     getFolderAwards,
     startPerfectRunLevel,
     beginPerfectRun,

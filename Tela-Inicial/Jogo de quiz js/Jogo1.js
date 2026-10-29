@@ -116,6 +116,61 @@ const questions = thematicQuiz
       answers: item.answers.map((text, index) => ({ id: index + 1, text, correct: index === item.correct })),
     }))
   : activeQuiz.questions;
+const answerPool = thematicQuiz
+  ? thematicQuiz.levels[activeDifficulty].map((item) => item.answers[item.correct])
+  : activeQuiz.questions.map((item) => item.answers.find((answer) => answer.correct)?.text).filter(Boolean);
+
+function answerShapeScore(answer, correct) {
+  const words = answer.trim().split(/\s+/);
+  const correctWords = correct.trim().split(/\s+/);
+  const articles = new Set(["o", "a", "os", "as", "um", "uma", "uns", "umas"]);
+  const startsWithArticle = articles.has(words[0].toLocaleLowerCase("pt-BR"));
+  const correctStartsWithArticle = articles.has(correctWords[0].toLocaleLowerCase("pt-BR"));
+  if (startsWithArticle !== correctStartsWithArticle) return Number.POSITIVE_INFINITY;
+
+  const wordDifference = Math.abs(words.length - correctWords.length);
+  const lengthDifference = Math.abs(answer.length - correct.length) / Math.max(correct.length, 1);
+  return wordDifference * 0.8 + lengthDifference;
+}
+
+function addNearMissDistractors(questionList, candidates) {
+  const pool = [...new Set(candidates.filter((answer) => typeof answer === "string" && answer.trim()))];
+  const ignoredPromptTerms = new Set(["essa", "esse", "qual", "quais", "como", "quando", "onde", "porque", "entre", "sobre", "para", "pela", "pelas", "pelos", "dela", "dele", "deles", "delas"]);
+
+  questionList.forEach((question) => {
+    const correct = question.answers.find((answer) => answer.correct);
+    if (!correct) return;
+
+    const prompt = question.question.toLocaleLowerCase("pt-BR");
+    for (let replacements = 0; replacements < 2; replacements++) {
+      const existingOptions = new Set(question.answers.map((answer) => answer.text.trim().toLocaleLowerCase("pt-BR")));
+      const closestCandidate = pool
+        .filter((candidate) => {
+          const normalizedCandidate = candidate.trim().toLocaleLowerCase("pt-BR");
+          const sharedPromptTerms = normalizedCandidate
+            .split(/[^\p{L}\p{N}]+/u)
+            .filter((term) => term.length > 3 && !ignoredPromptTerms.has(term) && prompt.includes(term));
+          return normalizedCandidate !== correct.text.trim().toLocaleLowerCase("pt-BR")
+            && !existingOptions.has(normalizedCandidate)
+            && !prompt.includes(normalizedCandidate)
+            && new Set(sharedPromptTerms).size < 2;
+        })
+        .map((text) => ({ text, score: answerShapeScore(text, correct.text) }))
+        .filter((candidate) => Number.isFinite(candidate.score))
+        .sort((left, right) => left.score - right.score)[0];
+      if (!closestCandidate) break;
+
+      const weakestDistractor = question.answers
+        .filter((answer) => !answer.correct)
+        .map((answer) => ({ answer, score: answerShapeScore(answer.text, correct.text) }))
+        .sort((left, right) => right.score - left.score)[0];
+      if (!weakestDistractor || closestCandidate.score + 0.25 >= weakestDistractor.score) break;
+      weakestDistractor.answer.text = closestCandidate.text;
+    }
+  });
+}
+
+addNearMissDistractors(questions, answerPool);
 const quizTitle = document.getElementById("quiz-title");
 quizTitle.textContent = `${activeQuiz.emoji} ${activeQuiz.title}`;
 document.title = `${activeQuiz.title} | Cube Cat Jogos`;
