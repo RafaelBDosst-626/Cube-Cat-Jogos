@@ -8,7 +8,16 @@
     lifeLost: "../assets/Efeitos Sonoros/Perca_de_Vida.mpeg",
     timer: "../assets/Efeitos Sonoros/Timer.wav",
   };
+  const effectVolumes = {
+    button: 0.28,
+    correct: 0.95,
+    wrong: 0.95,
+    gameOver: 0.72,
+    lifeLost: 0.72,
+    timer: 0.65,
+  };
   const MUSIC_MUTED_KEY = "cubeCatBackgroundMusicMutedV1";
+  const MUSIC_VOLUME_KEY = "cubeCatBackgroundMusicVolumeV1";
   const MUSIC_TIME_KEY = "cubeCatBackgroundMusicTimeV1";
   const ALL_AUDIO_MUTED_KEY = "cubeCatAllAudioMutedDevV1";
   const scriptUrl = document.currentScript.src;
@@ -18,17 +27,20 @@
   let lastSavedAt = 0;
   let muted = false;
   let allAudioMuted = false;
+  let volume = 0.22;
 
   try {
     muted = localStorage.getItem(MUSIC_MUTED_KEY) === "true";
     allAudioMuted = localStorage.getItem(ALL_AUDIO_MUTED_KEY) === "true";
+    const savedVolume = localStorage.getItem(MUSIC_VOLUME_KEY);
+    if (savedVolume !== null && Number.isFinite(Number(savedVolume))) volume = Math.max(0, Math.min(1, Number(savedVolume)));
   } catch {
     // The on-screen control still works when storage is unavailable.
   }
 
   music.loop = true;
   music.preload = "auto";
-  music.volume = 0.22;
+  music.volume = volume;
   music.muted = muted || allAudioMuted;
 
   button.type = "button";
@@ -59,28 +71,41 @@
     music.play().then(() => updateButton()).catch(() => updateButton(true));
   };
 
-  button.addEventListener("click", () => {
-    if (muted || music.paused) {
-      muted = false;
-      music.muted = allAudioMuted;
-      try {
-        localStorage.setItem(MUSIC_MUTED_KEY, "false");
-      } catch {
-        // Keep the preference for this page even when storage is unavailable.
-      }
-      playMusic();
-      return;
-    }
+  const notifyMusicSettings = () => {
+    window.dispatchEvent(new CustomEvent("cube-cat:music-settings-change", { detail: { volume, muted } }));
+  };
 
-    muted = true;
-    music.muted = true;
+  const setMusicMuted = (value) => {
+    muted = Boolean(value);
+    music.muted = muted || allAudioMuted;
     try {
-      localStorage.setItem(MUSIC_MUTED_KEY, "true");
+      localStorage.setItem(MUSIC_MUTED_KEY, String(muted));
     } catch {
       // Keep the preference for this page even when storage is unavailable.
     }
     updateButton();
-    savePosition();
+    if (muted) savePosition();
+    else playMusic();
+    notifyMusicSettings();
+    return muted;
+  };
+
+  const setMusicVolume = (value) => {
+    const nextVolume = Number(value);
+    if (!Number.isFinite(nextVolume)) return volume;
+    volume = Math.max(0, Math.min(1, nextVolume));
+    music.volume = volume;
+    try {
+      localStorage.setItem(MUSIC_VOLUME_KEY, String(volume));
+    } catch {
+      // Keep the setting for this page even when storage is unavailable.
+    }
+    notifyMusicSettings();
+    return volume;
+  };
+
+  button.addEventListener("click", () => {
+    setMusicMuted(!(muted || music.paused));
   });
 
   music.addEventListener("loadedmetadata", () => {
@@ -125,7 +150,7 @@
       if (!sound) {
         sound = new Audio(new URL(path, scriptUrl));
         sound.preload = "auto";
-        sound.volume = 0.65;
+        sound.volume = effectVolumes[name] ?? 0.65;
         sound.muted = allAudioMuted;
         effects.set(name, sound);
       }
@@ -142,8 +167,13 @@
         // Keep the setting for this page when storage is unavailable.
       }
       if (!allAudioMuted) playMusic();
+      notifyMusicSettings();
       return allAudioMuted;
     },
+    setMusicMuted,
+    isMusicMuted() { return muted; },
+    setMusicVolume,
+    getMusicSettings() { return { volume, muted }; },
     isAllMuted() { return allAudioMuted; },
   };
 })();

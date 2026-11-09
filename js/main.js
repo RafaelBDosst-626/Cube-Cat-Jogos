@@ -128,6 +128,35 @@ function setupGameReactionPopup() {
   });
 }
 
+function setupColorTheme() {
+  const storageKey = "cubeCatColorThemeV1";
+  const themes = new Set(["classic", "dark", "kids"]);
+  let activeTheme = "classic";
+  try {
+    const savedTheme = localStorage.getItem(storageKey);
+    if (themes.has(savedTheme)) activeTheme = savedTheme;
+  } catch {
+    // The current page can still change themes if storage is unavailable.
+  }
+  document.documentElement.dataset.colorTheme = activeTheme;
+
+  window.CubeCatTheme = {
+    get() { return activeTheme; },
+    set(theme) {
+      if (!themes.has(theme)) return activeTheme;
+      activeTheme = theme;
+      document.documentElement.dataset.colorTheme = activeTheme;
+      try {
+        localStorage.setItem(storageKey, activeTheme);
+      } catch {
+        // Keep the selection for this page when storage is unavailable.
+      }
+      window.dispatchEvent(new CustomEvent("cube-cat:theme-change", { detail: { theme: activeTheme } }));
+      return activeTheme;
+    },
+  };
+}
+
 function setupGameQuickMenu() {
   let destination;
   let exitLabel;
@@ -141,6 +170,10 @@ function setupGameQuickMenu() {
     destination = new URL("../menu/say-my-name.html", window.location.href).href;
     gameName = "Say my name!";
     exitLabel = "Sair para a tela inicial do Say my name!";
+  } else if (document.querySelector("[data-game-timer], .timer-track, .timer-stat, [id*='timer' i], [class*='timer' i]")) {
+    destination = new URL("index.html", window.location.href).href;
+    gameName = document.title || "Jogo";
+    exitLabel = "Sair da partida";
   } else {
     return;
   }
@@ -148,12 +181,18 @@ function setupGameQuickMenu() {
   const menu = document.createElement("div");
   menu.className = "game-quick-menu";
 
+  const backdrop = document.createElement("button");
+  backdrop.className = "game-quick-menu__backdrop";
+  backdrop.type = "button";
+  backdrop.setAttribute("aria-label", "Fechar configurações");
+  backdrop.hidden = true;
+
   const toggle = document.createElement("button");
   toggle.className = "game-quick-menu__toggle";
   toggle.type = "button";
   toggle.setAttribute("aria-label", "Abrir menu do jogo");
   toggle.setAttribute("aria-expanded", "false");
-  toggle.setAttribute("aria-controls", "game-quick-menu-panel game-quick-menu-message");
+  toggle.setAttribute("aria-controls", "game-quick-menu-panel");
   for (let index = 0; index < 3; index += 1) {
     const line = document.createElement("span");
     line.className = "game-quick-menu__line";
@@ -171,6 +210,7 @@ function setupGameQuickMenu() {
   panel.id = "game-quick-menu-panel";
   panel.setAttribute("aria-hidden", "true");
   panel.setAttribute("inert", "");
+  panel.setAttribute("aria-label", "Configurações do jogo");
 
   const message = document.createElement("div");
   message.className = "game-quick-menu__message";
@@ -182,13 +222,101 @@ function setupGameQuickMenu() {
 
   const heading = document.createElement("p");
   heading.className = "game-quick-menu__heading";
-  heading.textContent = gameName;
+  heading.textContent = "Configurações";
+
+  const gameLabel = document.createElement("p");
+  gameLabel.className = "game-quick-menu__game-label";
+  gameLabel.textContent = gameName;
+
+  const audioSection = document.createElement("section");
+  audioSection.className = "game-quick-menu__section";
+  audioSection.setAttribute("aria-labelledby", "game-quick-menu-audio-title");
+  const audioTitle = document.createElement("h3");
+  audioTitle.className = "game-quick-menu__section-title";
+  audioTitle.id = "game-quick-menu-audio-title";
+  audioTitle.textContent = "Som";
+  const volumeLabel = document.createElement("label");
+  volumeLabel.className = "game-quick-menu__volume-label";
+  volumeLabel.htmlFor = "game-quick-menu-music-volume";
+  const volumeName = document.createElement("span");
+  volumeName.textContent = "Música de fundo";
+  const volumeValue = document.createElement("output");
+  volumeValue.className = "game-quick-menu__volume-value";
+  volumeValue.htmlFor = "game-quick-menu-music-volume";
+  volumeValue.textContent = "22%";
+  volumeLabel.append(volumeName, volumeValue);
+  const volumeSlider = document.createElement("input");
+  volumeSlider.className = "game-quick-menu__volume-slider";
+  volumeSlider.id = "game-quick-menu-music-volume";
+  volumeSlider.type = "range";
+  volumeSlider.min = "0";
+  volumeSlider.max = "100";
+  volumeSlider.step = "1";
+  volumeSlider.value = "22";
+  volumeSlider.setAttribute("aria-label", "Volume da música de fundo");
+  const muteMusic = document.createElement("button");
+  muteMusic.className = "game-quick-menu__mute";
+  muteMusic.type = "button";
+  muteMusic.textContent = "Mutar música de fundo";
+  audioSection.append(audioTitle, volumeLabel, volumeSlider, muteMusic);
+
+  const screenSection = document.createElement("section");
+  screenSection.className = "game-quick-menu__section game-quick-menu__screen-section";
+  screenSection.setAttribute("aria-labelledby", "game-quick-menu-screen-title");
+  const screenTitle = document.createElement("h3");
+  screenTitle.className = "game-quick-menu__section-title";
+  screenTitle.id = "game-quick-menu-screen-title";
+  screenTitle.textContent = "Tela";
+  const themeLabel = document.createElement("p");
+  themeLabel.className = "game-quick-menu__theme-label";
+  themeLabel.textContent = "Tema de cores";
+  const themes = document.createElement("div");
+  themes.className = "game-quick-menu__themes";
+  themes.setAttribute("aria-label", "Prévia de temas de cores");
+  [
+    { id: "classic", name: "Clássico", colors: ["#3ddbdf", "#101a26", "#e8d94a"] },
+    { id: "dark", name: "Escuro", colors: ["#56e9f5", "#090b0f", "#626a78"] },
+    { id: "kids", name: "Infantil", colors: ["#35b9f4", "#6836e8", "#ff9425"] },
+  ].forEach((theme) => {
+    const preview = document.createElement("button");
+    preview.type = "button";
+    preview.className = "game-quick-menu__theme-preview";
+    preview.dataset.theme = theme.id;
+    preview.setAttribute("aria-pressed", "false");
+    const swatches = document.createElement("span");
+    swatches.className = "game-quick-menu__swatches";
+    theme.colors.forEach((color) => {
+      const swatch = document.createElement("span");
+      swatch.style.setProperty("--swatch-color", color);
+      swatches.appendChild(swatch);
+    });
+    const name = document.createElement("span");
+    name.textContent = theme.name;
+    preview.append(swatches, name);
+    preview.addEventListener("click", () => window.CubeCatTheme?.set(theme.id));
+    themes.appendChild(preview);
+  });
+  const syncThemeControls = () => {
+    const activeTheme = window.CubeCatTheme?.get?.() || "classic";
+    themes.querySelectorAll(".game-quick-menu__theme-preview").forEach((preview) => {
+      const selected = preview.dataset.theme === activeTheme;
+      preview.classList.toggle("is-current", selected);
+      preview.setAttribute("aria-pressed", String(selected));
+    });
+  };
+  window.addEventListener("cube-cat:theme-change", syncThemeControls);
+  const themeNotice = document.createElement("p");
+  themeNotice.className = "game-quick-menu__coming-soon";
+  themeNotice.textContent = "A paleta escolhida se aplica à interface do jogo.";
+  screenSection.append(screenTitle, themeLabel, themes, themeNotice);
+
   const exit = document.createElement("button");
   exit.className = "game-quick-menu__exit";
   exit.type = "button";
   exit.textContent = exitLabel;
-  panel.append(heading, exit);
+  panel.append(heading, gameLabel, audioSection, screenSection, exit);
   menu.append(toggle, message, panel);
+  document.body.appendChild(backdrop);
   document.body.appendChild(menu);
 
   const emojiMessages = [
@@ -217,35 +345,49 @@ function setupGameQuickMenu() {
     requestAnimationFrame(() => message.classList.add("is-visible"));
   };
 
+  const syncMusicControls = () => {
+    const settings = window.CubeCatAudio?.getMusicSettings?.();
+    if (!settings) return;
+    const percent = Math.round(settings.volume * 100);
+    volumeSlider.value = String(percent);
+    volumeValue.value = `${percent}%`;
+    volumeValue.textContent = `${percent}%`;
+    muteMusic.textContent = settings.muted ? "Ativar música de fundo" : "Mutar música de fundo";
+    muteMusic.setAttribute("aria-pressed", String(settings.muted));
+    muteMusic.classList.toggle("is-muted", settings.muted);
+  };
+
+  volumeSlider.addEventListener("input", () => {
+    const percent = Number(volumeSlider.value);
+    volumeValue.value = `${percent}%`;
+    volumeValue.textContent = `${percent}%`;
+    window.CubeCatAudio?.setMusicVolume?.(percent / 100);
+  });
+  muteMusic.addEventListener("click", () => {
+    const audio = window.CubeCatAudio;
+    if (audio?.setMusicMuted && audio?.isMusicMuted) audio.setMusicMuted(!audio.isMusicMuted());
+  });
+  window.addEventListener("cube-cat:music-settings-change", syncMusicControls);
+  window.addEventListener("load", syncMusicControls, { once: true });
+
   const setOpen = (isOpen) => {
     menu.classList.toggle("is-open", isOpen);
     toggle.setAttribute("aria-expanded", String(isOpen));
     toggle.setAttribute("aria-label", isOpen ? "Fechar menu do jogo" : "Abrir menu do jogo");
     panel.setAttribute("aria-hidden", String(!isOpen));
     panel.toggleAttribute("inert", !isOpen);
+    backdrop.hidden = !isOpen;
+    message.hidden = isOpen;
+    message.setAttribute("aria-hidden", "true");
+    syncMusicControls();
+    syncThemeControls();
 
     window.clearTimeout(messageTimer);
     window.clearTimeout(messageHideTimer);
-    if (isOpen) {
-      message.hidden = false;
-      message.setAttribute("aria-hidden", "false");
-      message.textContent = "...";
-      message.classList.add("is-thinking");
-      requestAnimationFrame(() => message.classList.add("is-visible"));
-      messageTimer = window.setTimeout(() => {
-        if (!menu.classList.contains("is-open")) return;
-        showMessage(emojiMessages);
-      }, 650);
-    } else {
-      message.setAttribute("aria-hidden", "true");
-      message.classList.remove("is-visible", "is-thinking");
-      messageHideTimer = window.setTimeout(() => {
-        if (!menu.classList.contains("is-open")) message.hidden = true;
-      }, 240);
-    }
   };
 
   toggle.addEventListener("click", () => setOpen(!menu.classList.contains("is-open")));
+  backdrop.addEventListener("click", () => setOpen(false));
   exit.addEventListener("click", () => showLoadingScreen(destination));
   document.addEventListener("pointerdown", (event) => {
     if (!menu.contains(event.target)) setOpen(false);
@@ -428,6 +570,7 @@ function setupBrandAssistant() {
 }
 
 setupGameReactionPopup();
+setupColorTheme();
 setupGameQuickMenu();
 setupBrandAssistant();
 

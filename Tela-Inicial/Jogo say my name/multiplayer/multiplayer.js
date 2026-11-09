@@ -85,7 +85,7 @@
   let useTeamSideLayout = isTeamMode && Array.isArray(playerNames) && playerNames.length === 2;
   gamePanel.classList.toggle("is-team-mode", isTeamMode);
   gamePanel.classList.toggle("is-team-side-layout", useTeamSideLayout);
-  participantsPanel.hidden = useTeamSideLayout;
+  participantsPanel.hidden = true;
   teamSideLeft.hidden = !useTeamSideLayout;
   teamSideRight.hidden = !useTeamSideLayout;
   tournamentRoundStat.hidden = !isVersus;
@@ -159,7 +159,7 @@
   function updateVersusLayout() {
     useTeamSideLayout = isTeamMode && (playerNames.length === 2 || (isVersus && tournamentStage === 1));
     gamePanel.classList.toggle("is-team-side-layout", useTeamSideLayout);
-    participantsPanel.hidden = useTeamSideLayout;
+    participantsPanel.hidden = !matchBegun || useTeamSideLayout;
     teamSideLeft.hidden = !useTeamSideLayout;
     teamSideRight.hidden = !useTeamSideLayout;
     if (useTeamSideLayout && tournamentStage === 1) teamSideIndices = [...finalistIndices];
@@ -200,7 +200,8 @@
     teamCardLeft.replaceChildren();
     teamCardRight.replaceChildren();
     players.forEach((player, index) => {
-      const card = document.createElement("article");
+      const card = document.createElement("button");
+      card.type = "button";
       card.className = `mp-player-card player-color-${index + 1}`;
       card.style.setProperty("--player-neon", participantColor(index));
       const avatar = window.CubeCatPixelAvatar.create(index);
@@ -210,6 +211,8 @@
       card.classList.toggle("is-out", player.lives <= 0);
       card.classList.toggle("is-claiming", firstClaims.has(index));
       card.classList.toggle("is-eliminated", isVersus && tournamentStage === 1 && !isActiveForStage);
+      card.disabled = player.lives <= 0 || !isActiveForStage || phase !== "choose" || (forcedWinnerIndex !== null && forcedWinnerIndex !== index) || (suddenDeath && suddenDeathFailedTeams.has(index));
+      card.setAttribute("aria-pressed", String(selectedPlayerIndex === index));
 
       const name = document.createElement("strong");
       name.className = "mp-player-name";
@@ -229,32 +232,8 @@
         heart.setAttribute("aria-hidden", "true");
         lives.appendChild(heart);
       }
-      const selectButton = document.createElement("button");
-      selectButton.type = "button";
-      selectButton.className = "mp-player-select";
-      selectButton.textContent = selectedPlayerIndex === index
-        ? (isTeamMode ? "Time selecionado" : "Selecionado para responder")
-        : (isTeamMode ? "Selecionar time" : "Selecionar resposta");
-      selectButton.disabled = suddenDeath || player.lives <= 0 || !isActiveForStage || phase !== "choose" || (forcedWinnerIndex !== null && forcedWinnerIndex !== index);
-      selectButton.setAttribute("aria-pressed", String(selectedPlayerIndex === index));
-      selectButton.addEventListener("click", () => {
-        if (phase !== "choose" || player.lives <= 0 || (forcedWinnerIndex !== null && forcedWinnerIndex !== index)) return;
-        firstClaims.clear();
-        selectedPlayerIndex = index;
-        revealButton.disabled = false;
-        turnPrompt.textContent = `${formatParticipant(player.name)} respondeu primeiro. Revele a resposta para conferir.`;
-        renderPlayers();
-      });
-
-      const claimButton = document.createElement("button");
-      claimButton.type = "button";
-      claimButton.className = "mp-first-claim";
-      claimButton.innerHTML = `<span aria-hidden="true">⚡</span> ${isTeamMode ? "Este time respondeu primeiro" : "Eu primeiro"}`;
-      claimButton.disabled = player.lives <= 0 || !isActiveForStage || phase !== "choose" || forcedWinnerIndex !== null;
-      if (suddenDeath && suddenDeathFailedTeams.has(index)) claimButton.disabled = true;
-      claimButton.setAttribute("aria-pressed", String(firstClaims.has(index)));
-      claimButton.addEventListener("click", () => {
-        if (phase !== "choose" || player.lives <= 0) return;
+      card.addEventListener("click", () => {
+        if (phase !== "choose" || player.lives <= 0 || !isActiveForStage || (forcedWinnerIndex !== null && forcedWinnerIndex !== index)) return;
         if (suddenDeath) {
           if (!isActiveForStage || suddenDeathFailedTeams.has(index)) return;
           selectedPlayerIndex = index;
@@ -266,24 +245,28 @@
           renderPlayers();
           return;
         }
-        if (firstClaims.has(index)) firstClaims.delete(index);
-        else firstClaims.add(index);
-        if (firstClaims.size === 1) {
-          selectedPlayerIndex = index;
-          revealButton.disabled = false;
-          turnPrompt.textContent = isTeamMode
-            ? `${formatParticipant(player.name)} marcou que respondeu primeiro. Se outro time também marcou, faça o desempate.`
-            : `${player.name} marcou “Eu primeiro”. Marque outro para desempatar.`;
-        } else if (firstClaims.size === 2) {
+        if (firstClaims.size === 1 && !firstClaims.has(index)) {
+          firstClaims.add(index);
           openTiebreak([...firstClaims]);
-        } else {
+          return;
+        }
+        if (firstClaims.has(index)) {
+          firstClaims.clear();
           selectedPlayerIndex = null;
           revealButton.disabled = true;
           turnPrompt.textContent = turnPromptForStage();
+        } else {
+          firstClaims.clear();
+          firstClaims.add(index);
+          selectedPlayerIndex = index;
+          revealButton.disabled = false;
+          turnPrompt.textContent = isTeamMode
+            ? `${formatParticipant(player.name)} selecionado. Revele a resposta para conferir.`
+            : `${player.name} selecionado. Revele a resposta para conferir.`;
         }
         renderPlayers();
       });
-      card.append(avatar, name, points, lives, selectButton, claimButton);
+      card.append(avatar, name, points, lives);
       if (useTeamSideLayout) {
         const sideIndex = teamSideIndices.indexOf(index);
         if (sideIndex === 0) teamCardLeft.appendChild(card);
@@ -564,6 +547,7 @@
     window.CubeCatAudio?.playEffect("gameOver");
     phase = "ended";
     gamePanel.hidden = true;
+    participantsPanel.hidden = true;
     gameOver.hidden = false;
     if (reason === "versus-winner") {
       endTitle.textContent = "Vitória no Versus!";
@@ -597,6 +581,7 @@
     gamePanel.inert = false;
     gamePanel.setAttribute("aria-hidden", "false");
     gamePanel.classList.add("is-started");
+    participantsPanel.hidden = useTeamSideLayout;
     phase = "choose";
     renderPlayers();
   });
@@ -722,6 +707,7 @@
   nextButton.addEventListener("click", startNextRound);
   if (!Array.isArray(playerNames) || playerNames.length < 2 || playerNames.length > 4 || playerNames.some((name) => typeof name !== "string" || !name.trim()) || !products.length) {
     gamePanel.hidden = true;
+  participantsPanel.hidden = true;
     matchIntro.hidden = true;
     missingPlayers.hidden = false;
     return;

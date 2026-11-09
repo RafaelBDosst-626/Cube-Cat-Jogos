@@ -1,3 +1,4 @@
+body { position: relative; }
 .mp-shell { width: min(1000px, calc(100% - 32px)); margin: 32px auto; }
 .mp-setup, .mp-game, .mp-over { padding: clamp(22px, 4vw, 38px); border: 1px solid var(--border-blue); border-radius: 18px; background: var(--bg-panel); box-shadow: 0 0 28px rgba(61,219,224,.12); }
 .mp-setup { width: min(540px, 100%); margin: 8vh auto 0; }
@@ -8,15 +9,16 @@
 .player-name-fields { display: grid; grid-template-columns: 1fr 1fr; column-gap: 14px; }
 .mp-feedback { min-height: 24px; margin-top: 12px; color: var(--neon-red); font-size: .9rem; }
 .mp-game { padding: clamp(16px, 3vw, 30px); }
-.mp-play-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(250px, .8fr); align-items: start; gap: 16px; }
-.mp-game.is-team-side-layout .mp-play-layout { grid-template-columns: minmax(175px, .58fr) minmax(0, 1.84fr) minmax(175px, .58fr); align-items: stretch; }
+.mp-play-layout { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 16px; }
+.mp-game.is-team-side-layout .mp-play-layout { grid-template-columns: minmax(0, 1fr); align-items: start; }
 .mp-content-panel, .mp-participants-panel { min-width: 0; padding: clamp(12px, 2vw, 20px); border: 1px solid var(--bg-panel-light); border-radius: 14px; background: #141a20; }
 .mp-participants-panel { position: sticky; top: 16px; }
 .mp-team-side { --team-neon: var(--neon-cyan); display: grid; min-width: 0; align-content: start; gap: 10px; padding: clamp(10px, 1.5vw, 16px); border: 1px solid color-mix(in srgb, var(--team-neon) 72%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--team-neon) 8%, #141a20); box-shadow: 0 0 24px color-mix(in srgb, var(--team-neon) 25%, transparent), inset 0 0 18px color-mix(in srgb, var(--team-neon) 10%, transparent); }
 .mp-team-side-left { --team-neon: #ff3b5c; }
 .mp-team-side-right { --team-neon: #31aaff; }
 .mp-team-side .mp-panel-title { margin: 0; color: var(--team-neon); text-align: center; text-shadow: 0 0 12px color-mix(in srgb, var(--team-neon) 55%, transparent); }
-.mp-team-card-slot .mp-player-card { align-content: start; height: 100%; text-align: center; }
+.mp-team-card-slot { position: relative; }
+.mp-team-card-slot .mp-player-card { position: relative; width: 100%; align-content: start; height: 100%; text-align: center; }
 .mp-team-card-slot .mp-player-avatar { justify-self: center; }
 .mp-team-card-slot .mp-player-name { overflow-wrap: anywhere; white-space: normal; }
 .mp-panel-title { margin: 0 0 12px; color: var(--neon-cyan); font-size: 1rem; }
@@ -26,18 +28,18 @@
 .mp-round-stat span { display: block; color: var(--text-muted); font-size: .72rem; }
 .mp-round-stat strong { color: var(--neon-cyan); font-size: 1.15rem; }
 .player-cards { display: grid; grid-template-columns: 1fr; gap: 10px; max-height: min(72vh, 680px); overflow-y: auto; overscroll-behavior: contain; padding: 3px; }
-.mp-player-card { --player-neon: var(--neon-cyan); display: grid; min-width: 0; gap: 8px; padding: 13px; border: 1px solid var(--player-neon); border-radius: 11px; background: #141a20; color: var(--text-light); box-shadow: 0 0 10px color-mix(in srgb, var(--player-neon) 35%, transparent), inset 0 0 9px color-mix(in srgb, var(--player-neon) 10%, transparent); transition: border-color .2s, box-shadow .2s, transform .2s; }
+.mp-player-card { --player-neon: var(--neon-cyan); appearance: none; display: grid; min-width: 0; gap: 8px; padding: 13px; border: 1px solid var(--player-neon); border-radius: 11px; background: #141a20; color: var(--text-light); font: inherit; text-align: left; cursor: pointer; box-shadow: 0 0 10px color-mix(in srgb, var(--player-neon) 35%, transparent), inset 0 0 9px color-mix(in srgb, var(--player-neon) 10%, transparent); transition: border-color .2s, background .25s, box-shadow .25s, transform .2s; }
 .player-color-1 { --player-neon: #ff3b5c; }
 .player-color-2 { --player-neon: #31aaff; }
 .player-color-3 { --player-neon: #ffe34d; }
 .player-color-4 { --player-neon: #39ef91; }
-.mp-player-card:hover { transform: translateY(-2px); }
-.mp-player-card.is-selected { border-color: var(--player-neon); box-shadow: 0 0 18px color-mix(in srgb, var(--player-neon) 55%, transparent), inset 0 0 12px color-mix(in srgb, var(--player-neon) 16%, transparent); }
+.mp-player-card:hover:not(:disabled) { transform: translateY(-2px); }
+.mp-player-card:disabled { cursor: default; }
+.mp-player-card:focus-visible { outline: 2px solid var(--player-neon); outline-offset: 3px; }
+.mp-player-card.is-selected { border-width: 2px; background: radial-gradient(ellipse at 50% 38%, color-mix(in srgb, var(--player-neon) 24%, #26394a) 0%, color-mix(in srgb, var(--player-neon) 13%, #192a39) 48%, #141a20 100%); box-shadow: 0 0 0 2px color-mix(in srgb, var(--player-neon) 22%, transparent), 0 0 24px color-mix(in srgb, var(--player-neon) 58%, transparent), inset 0 0 18px color-mix(in srgb, var(--player-neon) 20%, transparent); }
 .mp-player-card.is-out { opacity: .48; }
 .mp-game.is-team-mode .mp-player-card { background: color-mix(in srgb, var(--player-neon) 9%, #141a20); }
-.mp-player-select, .mp-first-claim { min-height: 38px; padding: 7px 9px; border: 1px solid color-mix(in srgb, var(--player-neon) 65%, transparent); border-radius: 7px; background: #10151a; color: var(--player-neon); font: inherit; font-size: .82rem; font-weight: 700; cursor: pointer; }
-.mp-player-select:hover:not(:disabled), .mp-first-claim:hover:not(:disabled), .mp-first-claim[aria-pressed="true"] { background: color-mix(in srgb, var(--player-neon) 18%, #10151a); box-shadow: 0 0 12px color-mix(in srgb, var(--player-neon) 35%, transparent); }
-.mp-player-select:disabled, .mp-first-claim:disabled { opacity: .45; cursor: default; }
+.mp-game.is-team-mode .mp-player-card.is-selected { background: radial-gradient(ellipse at 50% 38%, color-mix(in srgb, var(--player-neon) 24%, #26394a) 0%, color-mix(in srgb, var(--player-neon) 13%, #192a39) 48%, #141a20 100%); }
 .mp-player-avatar { justify-self: start; margin-bottom: 2px; }
 .mp-player-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mp-player-points { color: var(--text-muted); font-size: .85rem; }
@@ -47,7 +49,7 @@
 .mp-heart.is-lost { color: #51565e; }
 .mp-turn-prompt { min-height: 24px; margin: 12px 0 16px; color: var(--text-muted); text-align: center; }
 .mp-images { gap: 16px; }
-.mp-images .image-window { aspect-ratio: 16 / 9; }
+.mp-images .image-window { aspect-ratio: 4 / 3; }
 .mp-image-cover { position: absolute; z-index: 2; inset: 0; display: grid; place-items: center; background: linear-gradient(145deg, #26313b, #0d1218); color: var(--neon-cyan); font-size: clamp(2rem, 6vw, 4rem); font-weight: 900; text-shadow: 0 0 18px currentColor; transition: transform .85s cubic-bezier(.2,.75,.25,1), opacity .3s; }
 .mp-image-cover::after { content: "?"; }
 .mp-game:not(.is-started) .mp-image-cover { transform: none; }
@@ -92,6 +94,32 @@
 [hidden] { display: none !important; }
 @media (max-width: 650px) { .player-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .mp-header { flex-wrap: wrap; } .mp-header > div:first-child { flex: 1 0 100%; } }
 @media (max-width: 480px) { .player-name-fields, .mp-answer-pair { grid-template-columns: 1fr; } .mp-images { gap: 9px; } .mp-images .image-window { aspect-ratio: .9; } .mp-images .image-card h2 { font-size: .75rem; } .mp-judgement { grid-template-columns: 1fr; } .mp-judgement p { grid-column: auto; } }
-@media (max-width: 360px) { .mp-shell { width: calc(100% - 20px); margin: 12px auto; } .mp-game { padding: 12px; } .player-cards { gap: 7px; } .mp-player-card { padding: 9px; } .mp-player-select, .mp-first-claim { padding-inline: 5px; font-size: .72rem; } .mp-round-stat { min-width: 0; flex: 1; } .mp-intro-backdrop, .mp-tiebreaker-backdrop { padding: 12px; } .mp-tiebreak-card { padding: 18px 14px; } .roulette-wrapper, .roulette { width: 180px; } }
+@media (max-width: 360px) { .mp-shell { width: calc(100% - 20px); margin: 12px auto; } .mp-game { padding: 12px; } .player-cards { gap: 7px; } .mp-player-card { padding: 9px; font-size: .78rem; } .mp-round-stat { min-width: 0; flex: 1; } .mp-intro-backdrop, .mp-tiebreaker-backdrop { padding: 12px; } .mp-tiebreak-card { padding: 18px 14px; } .roulette-wrapper, .roulette { width: 180px; } }
 @media (max-width: 420px) { .mp-duel-picks { grid-template-columns: 1fr; gap: 9px; } }
 @media (max-width: 850px) { .mp-play-layout, .mp-game.is-team-side-layout .mp-play-layout { grid-template-columns: 1fr; } .mp-participants-panel { position: static; } .player-cards { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); max-height: none; overflow: visible; } }
+
+/* O painel de participantes é irmão do jogo e fica fora da sua borda. */
+@media (min-width: 901px) {
+  .mp-content-panel { width: min(920px, 100%); margin-inline: auto; }
+  .mp-team-side { position: absolute; z-index: 5; top: 150px; width: clamp(138px, 12vw, 164px); padding: 0; border: 0; background: transparent; box-shadow: none; pointer-events: none; }
+  .mp-team-side-left { left: 0; }
+  .mp-team-side-right { right: 0; }
+  .mp-team-side .mp-panel-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  .mp-team-card-slot { pointer-events: auto; }
+  .mp-team-card-slot .mp-player-card { height: auto; }
+  .mp-participants-panel { position: absolute; z-index: 5; inset: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; pointer-events: none; }
+  .mp-participants-panel .mp-panel-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  .player-cards { position: absolute; inset: 0; display: block; max-height: none; overflow: visible; padding: 0; }
+  .player-cards > .mp-player-card { position: absolute; width: clamp(138px, 12vw, 164px); padding: 11px; gap: 6px; pointer-events: auto; backdrop-filter: blur(8px); }
+  .player-cards > .mp-player-card:nth-child(1) { top: 140px; left: 0; }
+  .player-cards > .mp-player-card:nth-child(2) { top: 140px; right: 0; }
+  .player-cards > .mp-player-card:nth-child(3) { top: 560px; left: 0; }
+  .player-cards > .mp-player-card:nth-child(4) { top: 560px; right: 0; }
+}
+@media (max-width: 900px) {
+  .mp-shell { width: min(1000px, calc(100% - 32px)); }
+  .mp-content-panel { width: 100%; }
+  .mp-team-side, .mp-participants-panel { position: static; width: min(1000px, calc(100% - 32px)); margin: 14px auto 0; padding: 14px; border: 1px solid var(--bg-panel-light); border-radius: 14px; background: #141a20; }
+  .player-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; max-height: none; overflow: visible; padding: 3px; }
+  .mp-player-card { position: static; width: auto; backdrop-filter: none; }
+}
